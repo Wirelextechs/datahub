@@ -13,6 +13,15 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Edit, Trash2, Plus, DollarSign, Percent, Copy, Share2, Eye, TrendingUp, Zap } from 'lucide-react';
 
+interface BaseProduct {
+  id: string;
+  name: string;
+  network: string;
+  size: string;
+  validity: string;
+  basePrice: number;
+}
+
 interface Product {
   id: string;
   name: string;
@@ -20,9 +29,8 @@ interface Product {
   size: string;
   validity: string;
   basePrice: number;
-  markup: number;
-  customerPrice: number;
-  commission: number;
+  profitMargin: number;
+  sellingPrice: number;
   isDefault: boolean;
 }
 
@@ -34,6 +42,41 @@ interface ShopInfo {
   shopUrl: string;
 }
 
+const BASE_PRODUCTS: BaseProduct[] = [
+  {
+    id: 'base-1',
+    name: '1GB Data Package',
+    network: 'MTN',
+    size: '1GB',
+    validity: 'NON EXPIRE',
+    basePrice: 4.55,
+  },
+  {
+    id: 'base-2',
+    name: '2GB Data Package',
+    network: 'MTN',
+    size: '2GB',
+    validity: 'NON EXPIRE',
+    basePrice: 9.09,
+  },
+  {
+    id: 'base-3',
+    name: '3GB Data Package',
+    network: 'AirtelTigo',
+    size: '3GB',
+    validity: 'NON EXPIRE',
+    basePrice: 13.64,
+  },
+  {
+    id: 'base-4',
+    name: '5GB Data Package',
+    network: 'Telecel',
+    size: '5GB',
+    validity: 'NON EXPIRE',
+    basePrice: 22.73,
+  },
+];
+
 const DEFAULT_PRODUCTS: Product[] = [
   {
     id: 'default-1',
@@ -42,9 +85,8 @@ const DEFAULT_PRODUCTS: Product[] = [
     size: '1GB',
     validity: 'NON EXPIRE',
     basePrice: 4.55,
-    markup: 10,
-    customerPrice: 5.00,
-    commission: 0.45,
+    profitMargin: 0.45,
+    sellingPrice: 5.00,
     isDefault: true,
   },
   {
@@ -54,9 +96,8 @@ const DEFAULT_PRODUCTS: Product[] = [
     size: '2GB',
     validity: 'NON EXPIRE',
     basePrice: 9.09,
-    markup: 10,
-    customerPrice: 10.00,
-    commission: 0.91,
+    profitMargin: 0.91,
+    sellingPrice: 10.00,
     isDefault: true,
   },
   {
@@ -66,9 +107,8 @@ const DEFAULT_PRODUCTS: Product[] = [
     size: '3GB',
     validity: 'NON EXPIRE',
     basePrice: 13.64,
-    markup: 10,
-    customerPrice: 15.00,
-    commission: 1.36,
+    profitMargin: 1.36,
+    sellingPrice: 15.00,
     isDefault: true,
   },
   {
@@ -78,12 +118,20 @@ const DEFAULT_PRODUCTS: Product[] = [
     size: '5GB',
     validity: 'NON EXPIRE',
     basePrice: 22.73,
-    markup: 10,
-    customerPrice: 25.00,
-    commission: 2.27,
+    profitMargin: 2.27,
+    sellingPrice: 25.00,
     isDefault: true,
   },
 ];
+
+// Helper function to generate slug from shop name
+const generateSlug = (name: string): string => {
+  return name
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .substring(0, 20);
+};
 
 export default function MyShopPage() {
   const [products, setProducts] = useState<Product[]>(DEFAULT_PRODUCTS);
@@ -92,22 +140,17 @@ export default function MyShopPage() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
   const [isAddingProduct, setIsAddingProduct] = useState(false);
-  const [newProduct, setNewProduct] = useState({
-    name: '',
-    network: 'MTN',
-    size: '',
-    validity: 'NON EXPIRE',
-    basePrice: 0,
-    markup: 10,
-  });
+  const [selectedBaseNetwork, setSelectedBaseNetwork] = useState('MTN');
+  const [selectedBaseProduct, setSelectedBaseProduct] = useState<BaseProduct | null>(null);
+  const [profitMarginAmount, setProfitMarginAmount] = useState(0);
 
   // Shop Info State
   const [shopInfo, setShopInfo] = useState<ShopInfo>({
     name: 'My Data Shop',
     description: 'Quality data packages at affordable prices',
-    slug: 'techs-cre5sx1',
+    slug: 'my-data-shop',
     status: 'Active',
-    shopUrl: 'https://datahub.shop/techs-cre5sx1',
+    shopUrl: 'https://datahub.shop/my-data-shop',
   });
 
   const [editingShopInfo, setEditingShopInfo] = useState<ShopInfo>(shopInfo);
@@ -126,37 +169,32 @@ export default function MyShopPage() {
     ? products.filter(p => !p.isDefault || defaultProductsEnabled)
     : products.filter(p => p.network === selectedNetwork && (!p.isDefault || defaultProductsEnabled));
 
+  // Get base products for selected network
+  const baseProductsForNetwork = BASE_PRODUCTS.filter(p => p.network === selectedBaseNetwork);
+
   const handleAddProduct = () => {
-    if (!newProduct.name || !newProduct.size || newProduct.basePrice <= 0) {
-      alert('Please fill in all fields');
+    if (!selectedBaseProduct || profitMarginAmount < 0) {
+      alert('Please select a product and enter a valid profit margin');
       return;
     }
 
-    const customerPrice = parseFloat((newProduct.basePrice * (1 + newProduct.markup / 100)).toFixed(2));
-    const commission = parseFloat((newProduct.basePrice * (newProduct.markup / 100)).toFixed(2));
+    const sellingPrice = parseFloat((selectedBaseProduct.basePrice + profitMarginAmount).toFixed(2));
 
     const product: Product = {
       id: `custom-${Date.now()}`,
-      name: newProduct.name,
-      network: newProduct.network,
-      size: newProduct.size,
-      validity: newProduct.validity,
-      basePrice: newProduct.basePrice,
-      markup: newProduct.markup,
-      customerPrice,
-      commission,
+      name: selectedBaseProduct.name,
+      network: selectedBaseProduct.network,
+      size: selectedBaseProduct.size,
+      validity: selectedBaseProduct.validity,
+      basePrice: selectedBaseProduct.basePrice,
+      profitMargin: profitMarginAmount,
+      sellingPrice,
       isDefault: false,
     };
 
     setProducts([...products, product]);
-    setNewProduct({
-      name: '',
-      network: 'MTN',
-      size: '',
-      validity: 'NON EXPIRE',
-      basePrice: 0,
-      markup: 10,
-    });
+    setSelectedBaseProduct(null);
+    setProfitMarginAmount(0);
     setIsAddingProduct(false);
   };
 
@@ -167,12 +205,11 @@ export default function MyShopPage() {
   const handleSaveEdit = () => {
     if (!editingProduct) return;
 
-    const customerPrice = parseFloat((editingProduct.basePrice * (1 + editingProduct.markup / 100)).toFixed(2));
-    const commission = parseFloat((editingProduct.basePrice * (editingProduct.markup / 100)).toFixed(2));
+    const sellingPrice = parseFloat((editingProduct.basePrice + editingProduct.profitMargin).toFixed(2));
 
     setProducts(products.map(p =>
       p.id === editingProduct.id
-        ? { ...editingProduct, customerPrice, commission }
+        ? { ...editingProduct, sellingPrice }
         : p
     ));
     setEditingProduct(null);
@@ -189,7 +226,16 @@ export default function MyShopPage() {
   };
 
   const handleSaveShopInfo = () => {
-    setShopInfo(editingShopInfo);
+    const newSlug = generateSlug(editingShopInfo.name);
+    const newShopUrl = `https://datahub.shop/${newSlug}`;
+    
+    const updatedShopInfo = {
+      ...editingShopInfo,
+      slug: newSlug,
+      shopUrl: newShopUrl,
+    };
+    
+    setShopInfo(updatedShopInfo);
     setIsEditingShop(false);
   };
 
@@ -242,6 +288,7 @@ export default function MyShopPage() {
               Share
             </Button>
           </div>
+          <p className="text-xs text-gray-500">Your shop link is automatically generated from your shop name</p>
         </CardContent>
       </Card>
 
@@ -308,6 +355,7 @@ export default function MyShopPage() {
                   placeholder="Enter your shop name"
                   className="mt-1"
                 />
+                <p className="text-xs text-gray-500 mt-1">Shop slug will be auto-generated from this name</p>
               </div>
               <div>
                 <Label htmlFor="shop-description">Shop Description</Label>
@@ -383,7 +431,7 @@ export default function MyShopPage() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle>Default Products</CardTitle>
-              <CardDescription>Pre-configured packages with 10% markup (your commission)</CardDescription>
+              <CardDescription>Pre-configured packages with 10% profit margin (your commission)</CardDescription>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium">
@@ -425,18 +473,18 @@ export default function MyShopPage() {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <Percent className="w-4 h-4 text-orange-500" />
-                    <span className="font-medium text-orange-600">{product.markup}%</span>
+                    <DollarSign className="w-4 h-4 text-orange-500" />
+                    <span className="font-medium text-orange-600">+GHS {product.profitMargin.toFixed(2)}</span>
                   </div>
 
                   <div className="border-t pt-2">
-                    <p className="text-gray-600">Customer Price:</p>
-                    <p className="font-bold text-green-600">GHS {product.customerPrice.toFixed(2)}</p>
+                    <p className="text-gray-600">Selling Price:</p>
+                    <p className="font-bold text-green-600">GHS {product.sellingPrice.toFixed(2)}</p>
                   </div>
 
                   <div>
-                    <p className="text-gray-600">Your Commission:</p>
-                    <p className="font-bold text-purple-600">GHS {product.commission.toFixed(2)}</p>
+                    <p className="text-gray-600">Your Profit:</p>
+                    <p className="font-bold text-purple-600">GHS {product.profitMargin.toFixed(2)}</p>
                   </div>
                 </div>
               </div>
@@ -462,80 +510,88 @@ export default function MyShopPage() {
                   Add Custom Product
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="max-w-2xl">
                 <DialogHeader>
                   <DialogTitle>Add Custom Product</DialogTitle>
                   <DialogDescription>
-                    Create a new custom product with your desired markup
+                    Select a base product and add your profit margin in GHS
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
+                  {/* Step 1: Select Network */}
                   <div>
-                    <Label htmlFor="product-name">Product Name</Label>
-                    <Input
-                      id="product-name"
-                      value={newProduct.name}
-                      onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-                      placeholder="e.g., Premium 10GB Package"
-                    />
+                    <Label htmlFor="network">Step 1: Select Network</Label>
+                    <Select value={selectedBaseNetwork} onValueChange={setSelectedBaseNetwork}>
+                      <SelectTrigger id="network">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="MTN">MTN</SelectItem>
+                        <SelectItem value="AirtelTigo">AirtelTigo</SelectItem>
+                        <SelectItem value="Telecel">Telecel</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="network">Network</Label>
-                      <Select value={newProduct.network} onValueChange={(value) => setNewProduct({ ...newProduct, network: value })}>
-                        <SelectTrigger id="network">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="MTN">MTN</SelectItem>
-                          <SelectItem value="AirtelTigo">AirtelTigo</SelectItem>
-                          <SelectItem value="Telecel">Telecel</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="size">Size</Label>
-                      <Input
-                        id="size"
-                        value={newProduct.size}
-                        onChange={(e) => setNewProduct({ ...newProduct, size: e.target.value })}
-                        placeholder="e.g., 10GB"
-                      />
-                    </div>
+                  {/* Step 2: Select Base Product */}
+                  <div>
+                    <Label htmlFor="base-product">Step 2: Select Product</Label>
+                    <Select 
+                      value={selectedBaseProduct?.id || ''} 
+                      onValueChange={(id) => {
+                        const product = baseProductsForNetwork.find(p => p.id === id);
+                        setSelectedBaseProduct(product || null);
+                      }}
+                    >
+                      <SelectTrigger id="base-product">
+                        <SelectValue placeholder="Select a product" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {baseProductsForNetwork.map((product) => (
+                          <SelectItem key={product.id} value={product.id}>
+                            {product.name} - GHS {product.basePrice.toFixed(2)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  {/* Step 3: Add Profit Margin */}
+                  {selectedBaseProduct && (
                     <div>
-                      <Label htmlFor="base-price">Base Price (GHS)</Label>
+                      <Label htmlFor="profit-margin">Step 3: Add Profit Margin (GHS)</Label>
                       <Input
-                        id="base-price"
+                        id="profit-margin"
                         type="number"
                         step="0.01"
-                        value={newProduct.basePrice}
-                        onChange={(e) => setNewProduct({ ...newProduct, basePrice: parseFloat(e.target.value) || 0 })}
+                        min="0"
+                        value={profitMarginAmount}
+                        onChange={(e) => setProfitMarginAmount(parseFloat(e.target.value) || 0)}
                         placeholder="0.00"
                       />
+                      <p className="text-xs text-gray-500 mt-1">Enter the amount you want to add as profit</p>
                     </div>
+                  )}
 
-                    <div>
-                      <Label htmlFor="markup">Markup (%)</Label>
-                      <Input
-                        id="markup"
-                        type="number"
-                        step="0.1"
-                        value={newProduct.markup}
-                        onChange={(e) => setNewProduct({ ...newProduct, markup: parseFloat(e.target.value) || 0 })}
-                        placeholder="10"
-                      />
-                    </div>
-                  </div>
-
-                  {newProduct.basePrice > 0 && (
-                    <div className="bg-blue-50 p-3 rounded-lg text-sm">
-                      <p className="text-gray-600">Customer Price: <span className="font-bold text-green-600">GHS {(newProduct.basePrice * (1 + newProduct.markup / 100)).toFixed(2)}</span></p>
-                      <p className="text-gray-600">Your Commission: <span className="font-bold text-purple-600">GHS {(newProduct.basePrice * (newProduct.markup / 100)).toFixed(2)}</span></p>
+                  {/* Preview */}
+                  {selectedBaseProduct && profitMarginAmount >= 0 && (
+                    <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Product:</span>
+                        <span className="font-semibold">{selectedBaseProduct.name}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Base Price:</span>
+                        <span className="font-semibold">GHS {selectedBaseProduct.basePrice.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Profit Margin:</span>
+                        <span className="font-semibold text-orange-600">+GHS {profitMarginAmount.toFixed(2)}</span>
+                      </div>
+                      <div className="border-t pt-2 flex justify-between">
+                        <span className="text-gray-600 font-semibold">Selling Price:</span>
+                        <span className="font-bold text-green-600">GHS {(selectedBaseProduct.basePrice + profitMarginAmount).toFixed(2)}</span>
+                      </div>
                     </div>
                   )}
 
@@ -594,18 +650,18 @@ export default function MyShopPage() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <Percent className="w-4 h-4 text-orange-500" />
-                      <span className="font-medium text-orange-600">{product.markup}%</span>
+                      <DollarSign className="w-4 h-4 text-orange-500" />
+                      <span className="font-medium text-orange-600">+GHS {product.profitMargin.toFixed(2)}</span>
                     </div>
 
                     <div className="border-t pt-2">
-                      <p className="text-gray-600">Customer Price:</p>
-                      <p className="font-bold text-green-600">GHS {product.customerPrice.toFixed(2)}</p>
+                      <p className="text-gray-600">Selling Price:</p>
+                      <p className="font-bold text-green-600">GHS {product.sellingPrice.toFixed(2)}</p>
                     </div>
 
                     <div>
-                      <p className="text-gray-600">Your Commission:</p>
-                      <p className="font-bold text-purple-600">GHS {product.commission.toFixed(2)}</p>
+                      <p className="text-gray-600">Your Profit:</p>
+                      <p className="font-bold text-purple-600">GHS {product.profitMargin.toFixed(2)}</p>
                     </div>
                   </div>
 
@@ -634,38 +690,39 @@ export default function MyShopPage() {
                                 <Input
                                   id="edit-name"
                                   value={editingProduct.name}
-                                  onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
+                                  readOnly
+                                  className="bg-gray-100"
                                 />
                               </div>
 
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <Label htmlFor="edit-base-price">Base Price</Label>
-                                  <Input
-                                    id="edit-base-price"
-                                    type="number"
-                                    step="0.01"
-                                    value={editingProduct.basePrice}
-                                    onChange={(e) => setEditingProduct({ ...editingProduct, basePrice: parseFloat(e.target.value) || 0 })}
-                                  />
-                                </div>
+                              <div>
+                                <Label htmlFor="edit-base-price">Base Price</Label>
+                                <Input
+                                  id="edit-base-price"
+                                  type="number"
+                                  step="0.01"
+                                  value={editingProduct.basePrice}
+                                  readOnly
+                                  className="bg-gray-100"
+                                />
+                              </div>
 
-                                <div>
-                                  <Label htmlFor="edit-markup">Markup (%)</Label>
-                                  <Input
-                                    id="edit-markup"
-                                    type="number"
-                                    step="0.1"
-                                    value={editingProduct.markup}
-                                    onChange={(e) => setEditingProduct({ ...editingProduct, markup: parseFloat(e.target.value) || 0 })}
-                                  />
-                                </div>
+                              <div>
+                                <Label htmlFor="edit-profit-margin">Profit Margin (GHS)</Label>
+                                <Input
+                                  id="edit-profit-margin"
+                                  type="number"
+                                  step="0.01"
+                                  min="0"
+                                  value={editingProduct.profitMargin}
+                                  onChange={(e) => setEditingProduct({ ...editingProduct, profitMargin: parseFloat(e.target.value) || 0 })}
+                                />
                               </div>
 
                               {editingProduct.basePrice > 0 && (
                                 <div className="bg-blue-50 p-3 rounded-lg text-sm">
-                                  <p className="text-gray-600">Customer Price: <span className="font-bold text-green-600">GHS {(editingProduct.basePrice * (1 + editingProduct.markup / 100)).toFixed(2)}</span></p>
-                                  <p className="text-gray-600">Your Commission: <span className="font-bold text-purple-600">GHS {(editingProduct.basePrice * (editingProduct.markup / 100)).toFixed(2)}</span></p>
+                                  <p className="text-gray-600">Selling Price: <span className="font-bold text-green-600">GHS {(editingProduct.basePrice + editingProduct.profitMargin).toFixed(2)}</span></p>
+                                  <p className="text-gray-600">Your Profit: <span className="font-bold text-purple-600">GHS {editingProduct.profitMargin.toFixed(2)}</span></p>
                                 </div>
                               )}
 
