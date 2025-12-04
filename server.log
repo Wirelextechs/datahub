@@ -293,3 +293,96 @@ https://nextjs.org/docs/messages/module-not-found
  GET /login 200 in 158ms
  POST /api/auth/login 401 in 378ms
  POST /api/auth/login 401 in 315ms
+ GET / 200 in 1495ms
+ GET /login 200 in 134ms
+ GET /login 200 in 110ms
+ POST /api/auth/login 401 in 311ms
+ POST /api/auth/login 200 in 309ms
+ ✓ Compiled /dashboard/admin in 72ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/admin 200 in 326ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/packages 200 in 245ms
+ GET /dashboard/packages 200 in 1150ms
+ GET /dashboard/packages 200 in 308ms
+ GET /favicon.ico 200 in 279ms
+ GET /dashboard/packages 200 in 101ms
+ GET /favicon.ico 200 in 325ms
+ GET /favicon.ico?favicon.bf3c9292.ico 200 in 326ms
+ GET /dashboard/orders 200 in 134ms
+ GET /dashboard/orders 200 in 136ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/afa-orders 200 in 274ms
+ GET /dashboard/afa-orders 200 in 124ms
+ GET /dashboard/wallet 200 in 119ms
+ GET /dashboard/wallet 200 in 193ms
+ GET /dashboard/support 200 in 117ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/shop-dashboard 200 in 286ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/shop 200 in 266ms
+ GET /admin 200 in 167ms
+ GET /admin/complaints 200 in 126ms
+ GET /admin/orders 200 in 563ms
+ GET /admin/orders 200 in 120ms
+ GET /admin/approvals 200 in 145ms
+ GET /favicon.ico?favicon.bf3c9292.ico 200 in 279ms
+ GET /admin/users 200 in 594ms
+ GET /admin/orders 200 in 591ms
+ GET /admin/settings 200 in 671ms
+ GET /admin/settings 200 in 123ms
+ GET /admin/settings 200 in 121ms
+ GET /admin/settings 200 in 106ms
+ GET /admin/settings 200 in 183ms
+ GET /admin/settings 200 in 228ms
+ GET /admin/settings 200 in 111ms
+ GET /admin/settings 200 in 110ms
+ GET /admin/settings 200 in 144ms
+ GET /admin/settings 200 in 110ms
+ GET /admin/users 200 in 118ms
+ GET /admin/settings 200 in 118ms
+ GET /admin/settings 200 in 117ms
+ GET /admin/settings 200 in 120ms
+ GET /admin/settings 200 in 122ms
+ GET /admin/settings 200 in 121ms
+ GET /admin 200 in 116ms
+ GET /dashboard 200 in 120ms
+ GET /admin 200 in 123ms
+ GET /dashboard/packages 200 in 118ms
+ GET /dashboard 200 in 371ms
+ GET /dashboard 200 in 148ms
+ GET /dashboard/orders 200 in 117ms
+ GET /dashboard/afa-orders 200 in 117ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/profile 200 in 658ms
+ GET /dashboard/profile 200 in 124ms
+ GET /dashboard 200 in 109ms
+ GET / 200 in 372ms
+ ✓ Compiled in 532ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard 200 in 1016ms
+ GET /dashboard 200 in 281ms
+ GET /favicon.ico 200 in 289ms
+ GET /dashboard/transactions 200 in 136ms
+ GET /favicon.ico?favicon.bf3c9292.ico 200 in 281ms
+ GET /dashboard/support 200 in 146ms
+ GET /dashboard/support 200 in 142ms
+ GET /dashboard 200 in 128ms
+ GET /favicon.ico?favicon.bf3c9292.ico 200 in 280ms
+ GET /dashboard/orders 200 in 118ms
+ GET /dashboard/profile 200 in 109ms
+ GET /dashboard/profile 200 in 116ms
+ GET /dashboard/packages 200 in 610ms
+ GET /dashboard/packages 200 in 214ms
+ GET /dashboard/packages 200 in 152ms
+ GET /dashboard/profile 200 in 133ms
+ GET /dashboard/profile 200 in 123ms
+ GET /dashboard/profile 200 in 109ms
+ ✓ Compiled in 556ms
+ GET /dashboard/profile 200 in 128ms
+ GET /dashboard/profile 200 in 126ms
+ ✓ Compiled in 684ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/profile 200 in 974ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/packages 200 in 322ms

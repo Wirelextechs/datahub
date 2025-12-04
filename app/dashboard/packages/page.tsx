@@ -11,28 +11,28 @@ export default function PackagesPage() {
 
   const packages = {
     mtn: [
-      { size: '1GB', price: 'GHS 5.00', validity: 'NON EXPIRE', profit: 'GHS 0.25' },
-      { size: '2GB', price: 'GHS 10.00', validity: 'NON EXPIRE', profit: 'GHS 0.50' },
-      { size: '3GB', price: 'GHS 15.00', validity: 'NON EXPIRE', profit: 'GHS 0.75' },
-      { size: '4GB', price: 'GHS 20.00', validity: 'NON EXPIRE', profit: 'GHS 1.00' },
-      { size: '5GB', price: 'GHS 25.00', validity: 'NON EXPIRE', profit: 'GHS 1.25' },
-      { size: '10GB', price: 'GHS 45.00', validity: 'NON EXPIRE', profit: 'GHS 2.25' },
+      { size: '1GB', price: 'GHS 5.00', validity: 'NON EXPIRE' },
+      { size: '2GB', price: 'GHS 10.00', validity: 'NON EXPIRE' },
+      { size: '3GB', price: 'GHS 15.00', validity: 'NON EXPIRE' },
+      { size: '4GB', price: 'GHS 20.00', validity: 'NON EXPIRE' },
+      { size: '5GB', price: 'GHS 25.00', validity: 'NON EXPIRE' },
+      { size: '10GB', price: 'GHS 45.00', validity: 'NON EXPIRE' },
     ],
     at: [
-      { size: '1GB', price: 'GHS 4.50', validity: 'NON EXPIRE', profit: 'GHS 0.20' },
-      { size: '2GB', price: 'GHS 9.00', validity: 'NON EXPIRE', profit: 'GHS 0.45' },
-      { size: '3GB', price: 'GHS 13.50', validity: 'NON EXPIRE', profit: 'GHS 0.65' },
-      { size: '4GB', price: 'GHS 18.00', validity: 'NON EXPIRE', profit: 'GHS 0.90' },
-      { size: '5GB', price: 'GHS 22.50', validity: 'NON EXPIRE', profit: 'GHS 1.10' },
-      { size: '10GB', price: 'GHS 40.00', validity: 'NON EXPIRE', profit: 'GHS 2.00' },
+      { size: '1GB', price: 'GHS 4.50', validity: 'NON EXPIRE' },
+      { size: '2GB', price: 'GHS 9.00', validity: 'NON EXPIRE' },
+      { size: '3GB', price: 'GHS 13.50', validity: 'NON EXPIRE' },
+      { size: '4GB', price: 'GHS 18.00', validity: 'NON EXPIRE' },
+      { size: '5GB', price: 'GHS 22.50', validity: 'NON EXPIRE' },
+      { size: '10GB', price: 'GHS 40.00', validity: 'NON EXPIRE' },
     ],
     telecel: [
-      { size: '1GB', price: 'GHS 5.50', validity: 'NON EXPIRE', profit: 'GHS 0.30' },
-      { size: '2GB', price: 'GHS 11.00', validity: 'NON EXPIRE', profit: 'GHS 0.55' },
-      { size: '3GB', price: 'GHS 16.50', validity: 'NON EXPIRE', profit: 'GHS 0.80' },
-      { size: '4GB', price: 'GHS 22.00', validity: 'NON EXPIRE', profit: 'GHS 1.10' },
-      { size: '5GB', price: 'GHS 27.50', validity: 'NON EXPIRE', profit: 'GHS 1.35' },
-      { size: '10GB', price: 'GHS 50.00', validity: 'NON EXPIRE', profit: 'GHS 2.50' },
+      { size: '1GB', price: 'GHS 5.50', validity: 'NON EXPIRE' },
+      { size: '2GB', price: 'GHS 11.00', validity: 'NON EXPIRE' },
+      { size: '3GB', price: 'GHS 16.50', validity: 'NON EXPIRE' },
+      { size: '4GB', price: 'GHS 22.00', validity: 'NON EXPIRE' },
+      { size: '5GB', price: 'GHS 27.50', validity: 'NON EXPIRE' },
+      { size: '10GB', price: 'GHS 50.00', validity: 'NON EXPIRE' },
     ],
   }
 
@@ -67,7 +67,7 @@ export default function PackagesPage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Data Packages</h1>
-        <p className="text-gray-600">Browse and manage all available data packages</p>
+        <p className="text-gray-600">Browse and purchase data packages instantly</p>
       </div>
 
       {/* Network Tabs */}
@@ -99,10 +99,6 @@ export default function PackagesPage() {
                     <p className="text-2xl font-bold text-gray-900">{pkg.price}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-600 mb-1">Your Profit</p>
-                    <p className="text-lg font-bold text-green-600">{pkg.profit}</p>
-                  </div>
-                  <div>
                     <p className="text-xs text-gray-600 mb-1">Validity</p>
                     <p className="text-sm font-medium text-gray-900">{pkg.validity}</p>
                   </div>
@@ -131,10 +127,6 @@ export default function PackagesPage() {
                     <p className="text-2xl font-bold text-gray-900">{pkg.price}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-600 mb-1">Your Profit</p>
-                    <p className="text-lg font-bold text-green-600">{pkg.profit}</p>
-                  </div>
-                  <div>
                     <p className="text-xs text-gray-600 mb-1">Validity</p>
                     <p className="text-sm font-medium text-gray-900">{pkg.validity}</p>
                   </div>
@@ -161,10 +153,6 @@ export default function PackagesPage() {
                   <div>
                     <p className="text-xs text-gray-600 mb-1">Price</p>
                     <p className="text-2xl font-bold text-gray-900">{pkg.price}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-600 mb-1">Your Profit</p>
-                    <p className="text-lg font-bold text-green-600">{pkg.profit}</p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-600 mb-1">Validity</p>
@@ -200,7 +188,7 @@ export default function PackagesPage() {
               </li>
               <li className="flex items-center gap-2">
                 <Check size={16} className="text-green-600" />
-                Earn profit on every package sold
+                Secure and safe transactions
               </li>
             </ul>
           </div>
