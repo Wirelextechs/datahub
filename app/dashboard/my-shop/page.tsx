@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
@@ -738,8 +738,10 @@ export default function MyShopPage() {
                         </DialogContent>
                       </Dialog>
 
-                      <AlertDialog>
-                        <DialogTrigger asChild>
+                      <AlertDialog open={deletingProduct?.id === product.id} onOpenChange={(open) => {
+                        if (!open) setDeletingProduct(null);
+                      }}>
+                        <AlertDialogTrigger asChild>
                           <Button
                             size="sm"
                             variant="destructive"
@@ -749,7 +751,7 @@ export default function MyShopPage() {
                             <Trash2 className="w-4 h-4" />
                             Delete
                           </Button>
-                        </DialogTrigger>
+                        </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
                             <AlertDialogTitle>Delete Product</AlertDialogTitle>
