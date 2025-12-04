@@ -1,0 +1,295 @@
+$ next dev --turbopack
+   ▲ Next.js 15.5.6 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://169.254.0.21:3000
+
+ ✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+ ✓ Ready in 1912ms
+ ○ Compiling / ...
+ ✓ Compiled / in 5.7s
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 5363ms
+ GET / 200 in 6774ms
+ ⚠ Cross origin request detected from spotty-experts-arrive.lindy.site to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 637ms
+ GET /favicon.ico 200 in 995ms
+ GET / 200 in 435ms
+ GET /favicon.ico 200 in 290ms
+ GET / 200 in 146ms
+ GET / 200 in 95ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 560ms
+ GET / 200 in 255ms
+ ✓ Compiled in 379ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 521ms
+ GET / 200 in 272ms
+ GET /favicon.ico 200 in 290ms
+ ✓ Compiled in 294ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 627ms
+ GET / 200 in 269ms
+ ✓ Compiled in 310ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 469ms
+ GET / 200 in 270ms
+ ✓ Compiled in 385ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 506ms
+ GET / 200 in 571ms
+ GET /favicon.ico 200 in 280ms
+ GET / 200 in 118ms
+ GET /favicon.ico?favicon.bf3c9292.ico 200 in 298ms
+ GET /favicon.ico 200 in 295ms
+ ✓ Compiled in 213ms
+ ✓ Compiled in 326ms
+ ✓ Compiled in 196ms
+ ✓ Compiled in 214ms
+ ✓ Compiled in 186ms
+ ✓ Compiled in 204ms
+ ✓ Compiled in 225ms
+ ✓ Compiled in 193ms
+ ✓ Compiled in 227ms
+ ✓ Compiled in 202ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 905ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard 200 in 1528ms
+ ○ Compiling /dashboard/packages ...
+ ✓ Compiled /dashboard/packages in 818ms
+ GET /dashboard/packages 200 in 942ms
+ ○ Compiling /dashboard/shop ...
+ ✓ Compiled /dashboard/shop in 679ms
+ GET /dashboard/shop 200 in 781ms
+ ○ Compiling /dashboard/shop-dashboard ...
+ ✓ Compiled /dashboard/shop-dashboard in 685ms
+ GET /dashboard/shop-dashboard 200 in 811ms
+ ○ Compiling /dashboard/wallet ...
+ ✓ Compiled /dashboard/wallet in 615ms
+ GET /dashboard/wallet 200 in 712ms
+ ○ Compiling /dashboard/profile ...
+ ✓ Compiled /dashboard/profile in 708ms
+ GET /dashboard/profile 200 in 822ms
+ ○ Compiling /dashboard/admin ...
+ ✓ Compiled /dashboard/admin in 649ms
+ GET /dashboard/admin 200 in 755ms
+ ○ Compiling /dashboard/settings ...
+ ✓ Compiled /dashboard/settings in 638ms
+ GET /dashboard/settings 200 in 853ms
+ ○ Compiling /dashboard/admin-orders ...
+ ✓ Compiled /dashboard/admin-orders in 558ms
+ GET /dashboard/admin-orders 200 in 660ms
+ GET / 200 in 375ms
+ GET / 200 in 307ms
+ GET /favicon.ico 200 in 342ms
+ GET / 200 in 578ms
+ ✓ Compiled in 331ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 277ms
+ ✓ Compiled in 345ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 292ms
+ ✓ Compiled in 328ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 251ms
+ GET / 200 in 161ms
+ ✓ Compiled in 333ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 290ms
+ GET / 200 in 120ms
+ ✓ Compiled in 308ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 286ms
+ GET / 200 in 103ms
+ ✓ Compiled in 101ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 866ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 944ms
+ GET /login 200 in 1107ms
+ GET / 200 in 325ms
+ ○ Compiling /get-started ...
+ ✓ Compiled /get-started in 744ms
+ GET /get-started 200 in 861ms
+ GET / 200 in 281ms
+ ○ Compiling /browse-packages ...
+ ✓ Compiled /browse-packages in 828ms
+ GET /browse-packages 200 in 948ms
+ GET / 200 in 267ms
+ ○ Compiling /become-agent ...
+ ✓ Compiled /become-agent in 869ms
+ GET /become-agent 200 in 991ms
+ GET / 200 in 327ms
+ GET /login 200 in 138ms
+ GET / 200 in 311ms
+ GET /browse-packages 200 in 185ms
+ GET / 200 in 290ms
+ GET /become-agent 200 in 191ms
+ GET / 200 in 309ms
+ GET / 200 in 399ms
+ ○ Compiling /signup ...
+ ✓ Compiled /signup in 1437ms
+ GET /signup 200 in 1647ms
+ GET /dashboard 200 in 165ms
+ GET /dashboard/shop-dashboard 200 in 209ms
+ GET /dashboard/shop-dashboard 200 in 208ms
+ GET /dashboard/shop 200 in 220ms
+ GET /dashboard/shop 200 in 203ms
+ GET /dashboard/profile 200 in 3193ms
+ GET /dashboard/profile 200 in 3111ms
+ GET /dashboard/wallet 200 in 3068ms
+ GET /dashboard/shop 200 in 3015ms
+ GET /favicon.ico 200 in 676ms
+ GET /dashboard/profile 200 in 774ms
+ ○ Compiling /dashboard/transactions ...
+ ✓ Compiled /dashboard/transactions in 2.1s
+ GET /dashboard/transactions 200 in 2278ms
+ ✓ Compiled in 490ms
+ ○ Compiling /dashboard/afa-orders ...
+ ✓ Compiled /dashboard/afa-orders in 662ms
+ GET /dashboard/afa-orders 200 in 798ms
+ ○ Compiling /dashboard/orders ...
+ ✓ Compiled /dashboard/orders in 708ms
+ GET /dashboard/orders 200 in 824ms
+ GET /dashboard/orders 200 in 148ms
+ GET /dashboard/packages 200 in 163ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/packages 200 in 298ms
+ GET /dashboard/packages 200 in 115ms
+ GET /favicon.ico?favicon.bf3c9292.ico 200 in 397ms
+ ✓ Compiled in 535ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /login 200 in 648ms
+ GET /dashboard 200 in 129ms
+ GET /dashboard 200 in 122ms
+ ✓ Compiled /api/auth/login in 275ms
+ ⨯ ./app/api/auth/login/route.ts:2:1
+Module not found: Can't resolve 'pg'
+[0m [90m 1 |[39m [36mimport[39m { [33mNextRequest[39m[33m,[39m [33mNextResponse[39m } [36mfrom[39m [32m'next/server'[39m
+[31m[1m>[22m[39m[90m 2 |[39m [36mimport[39m { [33mPool[39m } [36mfrom[39m [32m'pg'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m pool [33m=[39m [36mnew[39m [33mPool[39m({
+ [90m 5 |[39m   host[33m:[39m [32m'localhost'[39m[33m,[39m[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 2.6s
+ POST /api/auth/login 500 in 3158ms
+ GET /login 200 in 206ms
+ POST /api/auth/login 200 in 424ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/admin 200 in 257ms
+ GET /dashboard 200 in 351ms
+ GET /favicon.ico 200 in 278ms
+ GET /dashboard 200 in 472ms
+ GET /dashboard/shop-dashboard 200 in 774ms
+ ○ Compiling /_not-found/page ...
+ ✓ Compiled /_not-found/page in 773ms
+ GET /admin 404 in 972ms
+ ✓ Compiled in 372ms
+ GET /admin 404 in 139ms
+ ✓ Compiled in 462ms
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 750ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /admin 200 in 997ms
+ GET /admin 200 in 119ms
+ GET /admin 200 in 400ms
+ GET /dashboard 200 in 376ms
+ GET /dashboard/shop-dashboard 200 in 269ms
+ GET /admin 200 in 153ms
+ GET /admin/users 404 in 185ms
+ GET /admin/users 404 in 152ms
+ ✓ Compiled in 421ms
+ ○ Compiling /admin/users ...
+ ✓ Compiled /admin/users in 628ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /admin/users 200 in 867ms
+ GET /admin/users 200 in 118ms
+ ✓ Compiled in 482ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /admin/users 200 in 276ms
+ GET /admin/users 200 in 149ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /admin/users 200 in 240ms
+ GET /admin/users 200 in 126ms
+ ✓ Compiled in 473ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /admin/users 200 in 250ms
+ GET /admin/users 200 in 143ms
+ ✓ Compiled in 433ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /admin/users 200 in 237ms
+ GET /admin/users 200 in 124ms
+ GET /admin/users 200 in 425ms
+ ○ Compiling /admin/orders ...
+ ✓ Compiled /admin/orders in 598ms
+ GET /admin/orders 200 in 735ms
+ ○ Compiling /admin/complaints ...
+ ✓ Compiled /admin/complaints in 642ms
+ GET /admin/complaints 200 in 759ms
+ ○ Compiling /admin/approvals ...
+ ✓ Compiled /admin/approvals in 590ms
+ GET /admin/approvals 200 in 705ms
+ ○ Compiling /admin/settings ...
+ ✓ Compiled /admin/settings in 583ms
+ GET /admin/settings 200 in 684ms
+ GET /dashboard 200 in 404ms
+ GET /dashboard 200 in 274ms
+ GET /favicon.ico 200 in 352ms
+ GET /admin 200 in 217ms
+ GET /dashboard 200 in 120ms
+ GET /dashboard/admin 200 in 151ms
+ GET /dashboard 200 in 110ms
+ GET /dashboard 200 in 132ms
+ GET /dashboard/admin 200 in 919ms
+ GET /dashboard 200 in 1013ms
+ GET /dashboard/settings 200 in 968ms
+ GET /favicon.ico 200 in 481ms
+ GET /dashboard/admin 200 in 131ms
+ GET /dashboard/admin 200 in 112ms
+ GET /dashboard 200 in 115ms
+ GET /dashboard 200 in 106ms
+ GET /dashboard/settings 200 in 116ms
+ GET /dashboard/admin-orders 200 in 143ms
+ GET /dashboard/admin-orders 200 in 124ms
+ ✓ Compiled in 428ms
+ ✓ Compiled in 454ms
+ ✓ Compiled in 436ms
+ ✓ Compiled in 456ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/admin-orders 200 in 266ms
+ GET /dashboard/admin-orders 200 in 136ms
+ GET /favicon.ico?favicon.bf3c9292.ico 200 in 356ms
+ ✓ Compiled in 1356ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/admin-orders 200 in 650ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard 200 in 760ms
+ GET /favicon.ico 200 in 274ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/orders 200 in 305ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/wallet 200 in 315ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/transactions 200 in 247ms
+ ○ Compiling /dashboard/support ...
+ ✓ Compiled /dashboard/support in 649ms
+ GET /dashboard/support 200 in 751ms
+ GET /dashboard/admin-orders 200 in 626ms
+ GET /favicon.ico 200 in 308ms
+ GET /login 200 in 158ms
+ POST /api/auth/login 401 in 378ms
+ POST /api/auth/login 401 in 315ms
