@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart, Check, Phone, Mail, AlertCircle } from 'lucide-react';
+import { ShoppingCart, Check, Phone, Mail, AlertCircle, Info } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface Product {
@@ -26,6 +26,25 @@ interface BuyFormData {
   email: string;
   productId: string;
 }
+
+// Network-specific validation patterns
+const NETWORK_PATTERNS: Record<string, { prefix: string; length: number; description: string }> = {
+  MTN: {
+    prefix: '05',
+    length: 10,
+    description: 'MTN numbers start with 05 (e.g., 0501234567)',
+  },
+  AirtelTigo: {
+    prefix: '02',
+    length: 10,
+    description: 'AirtelTigo numbers start with 02 (e.g., 0201234567)',
+  },
+  Telecel: {
+    prefix: '02',
+    length: 10,
+    description: 'Telecel numbers start with 02 (e.g., 0201234567)',
+  },
+};
 
 // Mock shop data - in production, this would come from a database
 const SHOP_DATA = {
@@ -120,6 +139,59 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
     Telecel: { gradient: 'from-red-400 to-red-600', bg: 'bg-red-50' },
   };
 
+  // Validate beneficiary number based on network
+  const validateBeneficiaryNumber = (number: string, network: string): { valid: boolean; error?: string } => {
+    if (!number.trim()) {
+      return { valid: false, error: 'Please enter a beneficiary number' };
+    }
+
+    // Check for country code (starts with +, 00, or 233)
+    if (number.startsWith('+') || number.startsWith('00') || number.startsWith('233')) {
+      return {
+        valid: false,
+        error: 'Please remove the country code. Enter only the local number (e.g., 0501234567)',
+      };
+    }
+
+    const networkPattern = NETWORK_PATTERNS[network];
+    if (!networkPattern) {
+      return { valid: false, error: 'Invalid network' };
+    }
+
+    // Check if number starts with correct prefix for the network
+    if (!number.startsWith(networkPattern.prefix)) {
+      return {
+        valid: false,
+        error: `${network} numbers must start with ${networkPattern.prefix}. ${networkPattern.description}`,
+      };
+    }
+
+    // Check length
+    if (number.length !== networkPattern.length) {
+      return {
+        valid: false,
+        error: `${network} numbers must be exactly ${networkPattern.length} digits long`,
+      };
+    }
+
+    // Check if all characters are digits
+    if (!/^\d+$/.test(number)) {
+      return {
+        valid: false,
+        error: 'Beneficiary number must contain only digits',
+      };
+    }
+
+    return { valid: true };
+  };
+
+  // Auto-clean beneficiary number (remove spaces)
+  const handleBeneficiaryNumberChange = (value: string) => {
+    // Remove all spaces
+    const cleanedValue = value.replace(/\s+/g, '');
+    setFormData({ ...formData, beneficiaryNumber: cleanedValue });
+  };
+
   const handleBuyClick = (product: Product) => {
     setSelectedProduct(product);
     setFormData({
@@ -133,20 +205,33 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
   };
 
   const validateForm = (): boolean => {
-    if (!formData.beneficiaryNumber.trim()) {
-      setErrorMessage('Please enter a beneficiary number');
+    if (!selectedProduct) {
+      setErrorMessage('Product not found');
       return false;
     }
+
+    // Validate beneficiary number with network-specific rules
+    const beneficiaryValidation = validateBeneficiaryNumber(
+      formData.beneficiaryNumber,
+      selectedProduct.network
+    );
+    if (!beneficiaryValidation.valid) {
+      setErrorMessage(beneficiaryValidation.error || 'Invalid beneficiary number');
+      return false;
+    }
+
     if (!formData.email.trim()) {
       setErrorMessage('Please enter an email address');
       return false;
     }
+
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setErrorMessage('Please enter a valid email address');
       return false;
     }
+
     return true;
   };
 
@@ -164,7 +249,7 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
     setTimeout(() => {
       setIsProcessing(false);
       setSuccessMessage(
-        `Order confirmed! You will be redirected to payment for ${selectedProduct?.name} (GHS ${selectedProduct?.sellingPrice.toFixed(2)})`
+        `Order confirmed! Sending ${selectedProduct?.name} to ${formData.beneficiaryNumber}. You will be redirected to payment for GHS ${selectedProduct?.sellingPrice.toFixed(2)}`
       );
 
       // In production, this would redirect to a payment gateway
@@ -286,6 +371,16 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
                           </Alert>
                         )}
 
+                        {/* Network Info Alert */}
+                        {selectedProduct && (
+                          <Alert className="bg-blue-50 border-blue-200">
+                            <Info className="h-4 w-4 text-blue-600" />
+                            <AlertDescription className="text-blue-800">
+                              <strong>{selectedProduct.network} Network:</strong> {NETWORK_PATTERNS[selectedProduct.network]?.description}
+                            </AlertDescription>
+                          </Alert>
+                        )}
+
                         {/* Beneficiary Number Input */}
                         <div>
                           <Label htmlFor="beneficiary" className="flex items-center gap-2">
@@ -295,16 +390,17 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
                           <Input
                             id="beneficiary"
                             type="tel"
-                            placeholder="Enter phone number (e.g., 0501234567)"
+                            placeholder={`e.g., ${NETWORK_PATTERNS[selectedProduct?.network || 'MTN']?.prefix}01234567`}
                             value={formData.beneficiaryNumber}
-                            onChange={(e) =>
-                              setFormData({ ...formData, beneficiaryNumber: e.target.value })
-                            }
+                            onChange={(e) => handleBeneficiaryNumberChange(e.target.value)}
                             className="mt-1"
                             disabled={isProcessing}
+                            maxLength={10}
                           />
                           <p className="text-xs text-gray-500 mt-1">
-                            The phone number where the data will be sent
+                            ✓ Spaces will be automatically removed
+                            <br />
+                            ✗ Do not include country code (+233 or 00)
                           </p>
                         </div>
 
