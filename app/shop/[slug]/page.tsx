@@ -27,22 +27,22 @@ interface BuyFormData {
   productId: string;
 }
 
-// Network-specific validation patterns
-const NETWORK_PATTERNS: Record<string, { prefix: string; length: number; description: string }> = {
+// Ghana network-specific validation patterns with correct prefixes
+const NETWORK_PATTERNS: Record<string, { prefixes: string[]; length: number; description: string }> = {
   MTN: {
-    prefix: '05',
+    prefixes: ['024', '025', '053', '054', '055', '059'],
     length: 10,
-    description: 'MTN numbers start with 05 (e.g., 0501234567)',
+    description: 'MTN numbers start with 024, 025, 053, 054, 055, or 059 (e.g., 0241234567)',
   },
   AirtelTigo: {
-    prefix: '02',
+    prefixes: ['027', '057', '026', '056'],
     length: 10,
-    description: 'AirtelTigo numbers start with 02 (e.g., 0201234567)',
+    description: 'AirtelTigo numbers start with 027, 057, 026, or 056 (e.g., 0271234567)',
   },
   Telecel: {
-    prefix: '02',
+    prefixes: ['020', '050'],
     length: 10,
-    description: 'Telecel numbers start with 02 (e.g., 0201234567)',
+    description: 'Telecel numbers start with 020 or 050 (e.g., 0201234567)',
   },
 };
 
@@ -139,7 +139,7 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
     Telecel: { gradient: 'from-red-400 to-red-600', bg: 'bg-red-50' },
   };
 
-  // Validate beneficiary number based on network
+  // Validate beneficiary number based on network with correct Ghana prefixes
   const validateBeneficiaryNumber = (number: string, network: string): { valid: boolean; error?: string } => {
     if (!number.trim()) {
       return { valid: false, error: 'Please enter a beneficiary number' };
@@ -149,21 +149,13 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
     if (number.startsWith('+') || number.startsWith('00') || number.startsWith('233')) {
       return {
         valid: false,
-        error: 'Please remove the country code. Enter only the local number (e.g., 0501234567)',
+        error: 'Please remove the country code. Enter only the local number (e.g., 0241234567)',
       };
     }
 
     const networkPattern = NETWORK_PATTERNS[network];
     if (!networkPattern) {
       return { valid: false, error: 'Invalid network' };
-    }
-
-    // Check if number starts with correct prefix for the network
-    if (!number.startsWith(networkPattern.prefix)) {
-      return {
-        valid: false,
-        error: `${network} numbers must start with ${networkPattern.prefix}. ${networkPattern.description}`,
-      };
     }
 
     // Check length
@@ -179,6 +171,16 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
       return {
         valid: false,
         error: 'Beneficiary number must contain only digits',
+      };
+    }
+
+    // Check if number starts with one of the valid prefixes for the network
+    const hasValidPrefix = networkPattern.prefixes.some(prefix => number.startsWith(prefix));
+    if (!hasValidPrefix) {
+      const prefixList = networkPattern.prefixes.join(', ');
+      return {
+        valid: false,
+        error: `${network} numbers must start with ${prefixList}. ${networkPattern.description}`,
       };
     }
 
@@ -390,7 +392,7 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
                           <Input
                             id="beneficiary"
                             type="tel"
-                            placeholder={`e.g., ${NETWORK_PATTERNS[selectedProduct?.network || 'MTN']?.prefix}01234567`}
+                            placeholder={`e.g., ${NETWORK_PATTERNS[selectedProduct?.network || 'MTN']?.prefixes[0]}1234567`}
                             value={formData.beneficiaryNumber}
                             onChange={(e) => handleBeneficiaryNumberChange(e.target.value)}
                             className="mt-1"
