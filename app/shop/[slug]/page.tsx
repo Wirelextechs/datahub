@@ -1,0 +1,378 @@
+'use client';
+
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { ShoppingCart, Check, Phone, Mail, AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+
+interface Product {
+  id: string;
+  name: string;
+  network: string;
+  size: string;
+  validity: string;
+  basePrice: number;
+  profitMargin: number;
+  sellingPrice: number;
+}
+
+interface BuyFormData {
+  beneficiaryNumber: string;
+  email: string;
+  productId: string;
+}
+
+// Mock shop data - in production, this would come from a database
+const SHOP_DATA = {
+  'my-data-shop': {
+    name: 'My Data Shop',
+    description: 'Quality data packages at affordable prices',
+    owner: 'Prosper Wedam',
+    products: [
+      {
+        id: 'prod-1',
+        name: '1GB Data Package',
+        network: 'MTN',
+        size: '1GB',
+        validity: 'NON EXPIRE',
+        basePrice: 4.55,
+        profitMargin: 0.45,
+        sellingPrice: 5.00,
+      },
+      {
+        id: 'prod-2',
+        name: '2GB Data Package',
+        network: 'MTN',
+        size: '2GB',
+        validity: 'NON EXPIRE',
+        basePrice: 9.09,
+        profitMargin: 0.91,
+        sellingPrice: 10.00,
+      },
+      {
+        id: 'prod-3',
+        name: '3GB Data Package',
+        network: 'AirtelTigo',
+        size: '3GB',
+        validity: 'NON EXPIRE',
+        basePrice: 13.64,
+        profitMargin: 1.36,
+        sellingPrice: 15.00,
+      },
+      {
+        id: 'prod-4',
+        name: '5GB Data Package',
+        network: 'Telecel',
+        size: '5GB',
+        validity: 'NON EXPIRE',
+        basePrice: 22.73,
+        profitMargin: 2.27,
+        sellingPrice: 25.00,
+      },
+      {
+        id: 'prod-5',
+        name: '1GB Data Package',
+        network: 'MTN',
+        size: '1GB',
+        validity: 'NON EXPIRE',
+        basePrice: 4.55,
+        profitMargin: 0.75,
+        sellingPrice: 5.30,
+      },
+    ] as Product[],
+  },
+};
+
+export default function PublicShopPage({ params }: { params: { slug: string } }) {
+  const shopSlug = params.slug;
+  const shopData = SHOP_DATA[shopSlug as keyof typeof SHOP_DATA];
+
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isBuyDialogOpen, setIsBuyDialogOpen] = useState(false);
+  const [formData, setFormData] = useState<BuyFormData>({
+    beneficiaryNumber: '',
+    email: '',
+    productId: '',
+  });
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  if (!shopData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-white mb-4">Shop Not Found</h1>
+          <p className="text-gray-400">The shop you're looking for doesn't exist.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const networkColors: Record<string, { gradient: string; bg: string }> = {
+    MTN: { gradient: 'from-yellow-400 to-yellow-600', bg: 'bg-yellow-50' },
+    AirtelTigo: { gradient: 'from-blue-400 to-blue-600', bg: 'bg-blue-50' },
+    Telecel: { gradient: 'from-red-400 to-red-600', bg: 'bg-red-50' },
+  };
+
+  const handleBuyClick = (product: Product) => {
+    setSelectedProduct(product);
+    setFormData({
+      beneficiaryNumber: '',
+      email: '',
+      productId: product.id,
+    });
+    setSuccessMessage('');
+    setErrorMessage('');
+    setIsBuyDialogOpen(true);
+  };
+
+  const validateForm = (): boolean => {
+    if (!formData.beneficiaryNumber.trim()) {
+      setErrorMessage('Please enter a beneficiary number');
+      return false;
+    }
+    if (!formData.email.trim()) {
+      setErrorMessage('Please enter an email address');
+      return false;
+    }
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setErrorMessage('Please enter a valid email address');
+      return false;
+    }
+    return true;
+  };
+
+  const handleProceedToPayment = async () => {
+    setErrorMessage('');
+    setSuccessMessage('');
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsProcessing(true);
+
+    // Simulate API call
+    setTimeout(() => {
+      setIsProcessing(false);
+      setSuccessMessage(
+        `Order confirmed! You will be redirected to payment for ${selectedProduct?.name} (GHS ${selectedProduct?.sellingPrice.toFixed(2)})`
+      );
+
+      // In production, this would redirect to a payment gateway
+      setTimeout(() => {
+        setIsBuyDialogOpen(false);
+        // Redirect to payment gateway
+        // window.location.href = '/payment?orderId=...';
+      }, 2000);
+    }, 1500);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 right-10 w-96 h-96 bg-gradient-to-br from-blue-500/30 to-purple-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-20 w-80 h-80 bg-gradient-to-tr from-cyan-500/20 to-blue-500/10 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="relative z-10">
+        {/* Header */}
+        <div className="max-w-6xl mx-auto px-4 py-16">
+          <div className="mb-12">
+            <h1 className="text-4xl font-bold text-white mb-2">{shopData.name}</h1>
+            <p className="text-gray-400 mb-4">{shopData.description}</p>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <span className="text-green-400">Shop Active</span>
+            </div>
+          </div>
+
+          {/* Products Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {shopData.products.map((product) => {
+              const colors = networkColors[product.network] || networkColors.MTN;
+              return (
+                <Card
+                  key={product.id}
+                  className="p-6 border-0 shadow-lg bg-slate-800/50 backdrop-blur-xl hover:shadow-xl transition-all hover:scale-105"
+                >
+                  <div className={`p-3 rounded-lg bg-gradient-to-br ${colors.gradient} text-white mb-4 w-fit`}>
+                    <ShoppingCart className="w-6 h-6" />
+                  </div>
+
+                  <h3 className="text-2xl font-bold text-white mb-2">{product.name}</h3>
+                  <p className="text-sm text-gray-400 mb-4">{product.network}</p>
+
+                  <div className="space-y-3 mb-6">
+                    <div>
+                      <p className="text-sm text-gray-400 mb-1">Size</p>
+                      <p className="text-lg font-bold text-white">{product.size}</p>
+                    </div>
+
+                    <div>
+                      <p className="text-sm text-gray-400 mb-1">Price</p>
+                      <p className="text-2xl font-bold text-white">GHS {product.sellingPrice.toFixed(2)}</p>
+                    </div>
+
+                    <div>
+                      <p className="text-sm text-gray-400 mb-1">Validity</p>
+                      <p className="text-sm text-white flex items-center gap-2">
+                        <Check className="w-4 h-4 text-green-400" />
+                        {product.validity}
+                      </p>
+                    </div>
+                  </div>
+
+                  <Dialog open={isBuyDialogOpen && selectedProduct?.id === product.id} onOpenChange={setIsBuyDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button
+                        onClick={() => handleBuyClick(product)}
+                        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold"
+                      >
+                        Buy Now
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-md">
+                      <DialogHeader>
+                        <DialogTitle>Buy {selectedProduct?.name}</DialogTitle>
+                        <DialogDescription>
+                          Enter your details to proceed with the purchase
+                        </DialogDescription>
+                      </DialogHeader>
+
+                      <div className="space-y-4">
+                        {/* Product Summary */}
+                        <div className="bg-slate-100 p-4 rounded-lg">
+                          <div className="flex justify-between mb-2">
+                            <span className="text-gray-600">Product:</span>
+                            <span className="font-semibold text-gray-900">{selectedProduct?.name}</span>
+                          </div>
+                          <div className="flex justify-between mb-2">
+                            <span className="text-gray-600">Network:</span>
+                            <span className="font-semibold text-gray-900">{selectedProduct?.network}</span>
+                          </div>
+                          <div className="flex justify-between mb-2">
+                            <span className="text-gray-600">Size:</span>
+                            <span className="font-semibold text-gray-900">{selectedProduct?.size}</span>
+                          </div>
+                          <div className="border-t pt-2 flex justify-between">
+                            <span className="text-gray-600 font-semibold">Total Price:</span>
+                            <span className="font-bold text-green-600">GHS {selectedProduct?.sellingPrice.toFixed(2)}</span>
+                          </div>
+                        </div>
+
+                        {/* Error Message */}
+                        {errorMessage && (
+                          <Alert variant="destructive">
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertDescription>{errorMessage}</AlertDescription>
+                          </Alert>
+                        )}
+
+                        {/* Success Message */}
+                        {successMessage && (
+                          <Alert className="bg-green-50 border-green-200">
+                            <Check className="h-4 w-4 text-green-600" />
+                            <AlertDescription className="text-green-800">{successMessage}</AlertDescription>
+                          </Alert>
+                        )}
+
+                        {/* Beneficiary Number Input */}
+                        <div>
+                          <Label htmlFor="beneficiary" className="flex items-center gap-2">
+                            <Phone className="w-4 h-4" />
+                            Beneficiary Number
+                          </Label>
+                          <Input
+                            id="beneficiary"
+                            type="tel"
+                            placeholder="Enter phone number (e.g., 0501234567)"
+                            value={formData.beneficiaryNumber}
+                            onChange={(e) =>
+                              setFormData({ ...formData, beneficiaryNumber: e.target.value })
+                            }
+                            className="mt-1"
+                            disabled={isProcessing}
+                          />
+                          <p className="text-xs text-gray-500 mt-1">
+                            The phone number where the data will be sent
+                          </p>
+                        </div>
+
+                        {/* Email Input */}
+                        <div>
+                          <Label htmlFor="email" className="flex items-center gap-2">
+                            <Mail className="w-4 h-4" />
+                            Email Address
+                          </Label>
+                          <Input
+                            id="email"
+                            type="email"
+                            placeholder="Enter your email"
+                            value={formData.email}
+                            onChange={(e) =>
+                              setFormData({ ...formData, email: e.target.value })
+                            }
+                            className="mt-1"
+                            disabled={isProcessing}
+                          />
+                          <p className="text-xs text-gray-500 mt-1">
+                            We'll send the receipt and confirmation to this email
+                          </p>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex gap-2 pt-4">
+                          <Button
+                            onClick={handleProceedToPayment}
+                            disabled={isProcessing}
+                            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                          >
+                            {isProcessing ? 'Processing...' : 'Proceed to Payment'}
+                          </Button>
+                          <Button
+                            onClick={() => setIsBuyDialogOpen(false)}
+                            variant="outline"
+                            disabled={isProcessing}
+                            className="flex-1"
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </Card>
+              );
+            })}
+          </div>
+
+          {/* Info Section */}
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="p-6 border-0 shadow-lg bg-slate-800/50 backdrop-blur-xl">
+              <h3 className="text-lg font-bold text-white mb-2">⚡ Instant Delivery</h3>
+              <p className="text-gray-400">Data is delivered instantly to your phone</p>
+            </Card>
+            <Card className="p-6 border-0 shadow-lg bg-slate-800/50 backdrop-blur-xl">
+              <h3 className="text-lg font-bold text-white mb-2">🔒 Secure Payment</h3>
+              <p className="text-gray-400">All transactions are encrypted and secure</p>
+            </Card>
+            <Card className="p-6 border-0 shadow-lg bg-slate-800/50 backdrop-blur-xl">
+              <h3 className="text-lg font-bold text-white mb-2">✅ 24/7 Support</h3>
+              <p className="text-gray-400">Get help anytime you need it</p>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
