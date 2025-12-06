@@ -326,8 +326,7 @@ export default function PackagesPage() {
                   <Alert className="bg-blue-50 border-blue-200">
                     <Info className="h-4 w-4 text-blue-600" />
                     <AlertDescription className="text-blue-800">
-                      <strong>{getNetworkDisplayName(selectedNetwork)} Network:</strong>{' '}
-                      {NETWORK_PATTERNS[selectedNetwork as keyof typeof NETWORK_PATTERNS]?.description}
+                      <strong>{getNetworkDisplayName(selectedNetwork)} Network:</strong> {NETWORK_PATTERNS[selectedNetwork as keyof typeof NETWORK_PATTERNS]?.description}
                     </AlertDescription>
                   </Alert>
 
@@ -370,7 +369,7 @@ export default function PackagesPage() {
                       disabled={isProcessing}
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      We'll send the receipt and confirmation to this email
+                      We&apos;ll send the receipt and confirmation to this email
                     </p>
                   </div>
 
