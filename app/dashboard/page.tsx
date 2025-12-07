@@ -18,6 +18,7 @@ export default function Dashboard() {
   // For now, using mock data
   const isApprovedAgent = false // This should come from user session
   const username = 'prosperwedam' // This should come from user session
+  const userId = '1' // This should come from user session
 
   // Sample data - Customer only sees balance and orders
   const stats = [
@@ -86,7 +87,7 @@ export default function Dashboard() {
   return (
     <div className="space-y-8">
       {/* Shop Link Section - Only for approved agents */}
-      <ShopLink username={username} isApprovedAgent={isApprovedAgent} />
+      <ShopLink username={username} isApprovedAgent={isApprovedAgent} userId={userId} />
 
       {/* Stats Grid - Customer Only */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
