@@ -164,13 +164,14 @@ export default function AgentApplicationModal({
                 variant="outline"
                 onClick={() => onOpenChange(false)}
                 disabled={loading}
+                className="flex-1"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
-                className="flex-1 bg-blue-600 hover:bg-blue-700"
                 disabled={loading || !businessName || !businessDescription}
+                className="flex-1"
               >
                 {loading ? (
                   <>

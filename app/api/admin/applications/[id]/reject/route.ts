@@ -11,10 +11,10 @@ const pool = new Pool({
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const appId = params.id
+    const { id: appId } = await params
 
     // Update application status
     await pool.query(
