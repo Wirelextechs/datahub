@@ -14,10 +14,25 @@ interface Shop {
   owner_name?: string
 }
 
+// Function to convert shop name to slug
+const generateSlug = (name: string): string => {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '') // Remove special characters
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+    .replace(/^-+|-+$/g, '') // Remove leading/trailing hyphens
+}
+
 export default function ShopPage() {
   const [shop, setShop] = useState<Shop | null>(null)
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)
+  const [shopName, setShopName] = useState('')
+  const [shopDescription, setShopDescription] = useState('')
+  const [generatedSlug, setGeneratedSlug] = useState('')
+  const [isSaving, setIsSaving] = useState(false)
 
   useEffect(() => {
     // For now, use demo shop data
@@ -30,16 +45,59 @@ export default function ShopPage() {
       owner_name: 'Prosper Wedam',
     }
     setShop(demoShop)
+    setShopName(demoShop.name)
+    setShopDescription(demoShop.description || '')
+    setGeneratedSlug(demoShop.slug)
     setLoading(false)
   }, [])
 
-  const shopLink = shop ? `${typeof window !== 'undefined' ? window.location.origin : 'https://datahub-kohl.vercel.app'}/shop/${shop.slug}` : ''
+  // Update slug in real-time when shop name changes
+  const handleShopNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newName = e.target.value
+    setShopName(newName)
+    
+    // Generate slug from the new name
+    const newSlug = generateSlug(newName)
+    setGeneratedSlug(newSlug)
+  }
+
+  const handleShopDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setShopDescription(e.target.value)
+  }
+
+  const shopLink = generatedSlug 
+    ? `${typeof window !== 'undefined' ? window.location.origin : 'https://datahub-kohl.vercel.app'}/shop/${generatedSlug}` 
+    : ''
 
   const copyToClipboard = () => {
     if (shopLink) {
       navigator.clipboard.writeText(shopLink)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
+    }
+  }
+
+  const handleSaveChanges = async () => {
+    setIsSaving(true)
+    try {
+      // TODO: Implement API call to save shop changes
+      // For now, just update the local state
+      if (shop) {
+        setShop({
+          ...shop,
+          name: shopName,
+          slug: generatedSlug,
+          description: shopDescription,
+        })
+      }
+      
+      // Show success message
+      setTimeout(() => {
+        setIsSaving(false)
+      }, 1000)
+    } catch (error) {
+      console.error('Error saving shop:', error)
+      setIsSaving(false)
     }
   }
 
@@ -105,7 +163,7 @@ export default function ShopPage() {
           </div>
           <div>
             <p className="text-xs text-gray-600 mb-1">Shop Slug</p>
-            <p className="font-semibold text-gray-900">{shop?.slug}</p>
+            <p className="font-semibold text-gray-900 break-all">{generatedSlug || 'Not set'}</p>
           </div>
         </div>
       </Card>
@@ -118,22 +176,31 @@ export default function ShopPage() {
             <input
               type="text"
               placeholder="Enter your shop name"
-              defaultValue={shop?.name}
+              value={shopName}
+              onChange={handleShopNameChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            <p className="text-xs text-gray-500 mt-2">
+              💡 The shop slug will automatically update based on your shop name
+            </p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Shop Description</label>
             <textarea
               placeholder="Describe your shop"
-              defaultValue={shop?.description}
+              value={shopDescription}
+              onChange={handleShopDescriptionChange}
               rows={4}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+          <Button 
+            onClick={handleSaveChanges}
+            disabled={isSaving}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
             <Settings className="mr-2 w-4 h-4" />
-            Save Changes
+            {isSaving ? 'Saving...' : 'Save Changes'}
           </Button>
         </div>
       </Card>
