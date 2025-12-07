@@ -11,10 +11,10 @@ const pool = new Pool({
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const slug = params.slug
+    const { slug } = await params
 
     // Get shop data
     const shopResult = await pool.query(
