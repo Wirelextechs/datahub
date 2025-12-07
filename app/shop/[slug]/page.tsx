@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -71,11 +71,7 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
-  useEffect(() => {
-    fetchShopData()
-  }, [params.slug])
-
-  const fetchShopData = async () => {
+  const fetchShopData = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/shops/${params.slug}`)
@@ -89,13 +85,17 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
       const data = await response.json()
       setShop(data.shop)
       setProducts(data.products || [])
-    } catch (err) {
-      console.error('Error fetching shop:', err)
+    } catch {
+      console.error('Error fetching shop')
       setError('Failed to load shop')
     } finally {
       setLoading(false)
     }
-  }
+  }, [params.slug])
+
+  useEffect(() => {
+    fetchShopData()
+  }, [fetchShopData])
 
   const validateBeneficiaryNumber = (number: string, network: string): { valid: boolean; error?: string } => {
     if (!number.trim()) {
@@ -170,7 +170,7 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
         setFormData({ beneficiaryNumber: '', email: '', productId: '' })
         setSuccessMessage('')
       }, 2000)
-    } catch (error) {
+    } catch {
       setErrorMessage('Payment failed. Please try again.')
     } finally {
       setIsProcessing(false)

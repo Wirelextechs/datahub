@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Pool } from 'pg'
 
 // Mock shop data for demonstration
-const MOCK_SHOPS: Record<string, any> = {
+const MOCK_SHOPS: Record<string, { shop: Record<string, unknown>; products: Record<string, unknown>[] }> = {
   'prosper-wedam-data-shop': {
     shop: {
       id: 1,
@@ -66,6 +67,23 @@ const MOCK_SHOPS: Record<string, any> = {
   },
 }
 
+let pool: Pool | null = null
+
+// Try to initialize the database pool if credentials are available
+if (process.env.PGUSER && process.env.PGPASSWORD) {
+  try {
+    pool = new Pool({
+      host: 'localhost',
+      port: 5432,
+      database: process.env.PGDATABASE || 'datahub_db',
+      user: process.env.PGUSER,
+      password: process.env.PGPASSWORD,
+    })
+  } catch (error) {
+    console.log('Database pool initialization skipped')
+  }
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
@@ -73,19 +91,9 @@ export async function GET(
   const { slug } = await params
 
   try {
-    // Try to fetch from database first if credentials are available
-    if (process.env.PGUSER && process.env.PGPASSWORD) {
+    // Try to fetch from database first if pool is available
+    if (pool) {
       try {
-        const { Pool } = require('pg')
-        const pool = new Pool({
-          host: 'localhost',
-          port: 5432,
-          database: process.env.PGDATABASE || 'datahub_db',
-          user: process.env.PGUSER,
-          password: process.env.PGPASSWORD,
-          connectionTimeoutMillis: 5000,
-        })
-
         // Get shop data
         const shopResult = await pool.query(
           'SELECT id, user_id, name, slug, description, owner_name FROM shops WHERE slug = $1',
@@ -101,16 +109,12 @@ export async function GET(
             [shop.id]
           )
 
-          await pool.end()
-
           return NextResponse.json({
             shop,
             products: productsResult.rows,
           })
         }
-
-        await pool.end()
-      } catch (dbError) {
+      } catch {
         console.log('Database query failed, using mock data')
       }
     }
