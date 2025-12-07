@@ -4,25 +4,80 @@ import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
-import { User, Mail, Phone, MapPin, Edit2, CheckCircle } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { User, Mail, Phone, MapPin, Edit2, CheckCircle, Save, X } from 'lucide-react'
+
+interface ProfileData {
+  fullName: string
+  email: string
+  phone: string
+  location: string
+  bio: string
+}
 
 export default function ProfilePage() {
-  const [accountType, setAccountType] = useState('customer') // Default to customer
+  const [accountType, setAccountType] = useState('customer')
   const [showApplyDialog, setShowApplyDialog] = useState(false)
   const [isApplying, setIsApplying] = useState(false)
   const [approvalMessage, setApprovalMessage] = useState('')
+  const [activeTab, setActiveTab] = useState('view')
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveMessage, setSaveMessage] = useState('')
+
+  // Profile data state
+  const [profileData, setProfileData] = useState<ProfileData>({
+    fullName: 'Prosper Wedam',
+    email: 'prosperwedam4424@gmail.com',
+    phone: '+233 XXX XXX XXX',
+    location: 'Accra, Ghana',
+    bio: 'Data enthusiast and entrepreneur',
+  })
+
+  // Edit form state
+  const [editData, setEditData] = useState<ProfileData>(profileData)
 
   const handleApplyAsAgent = async () => {
     setIsApplying(true)
-    // Simulate API call
     setTimeout(() => {
       setAccountType('agent')
       setApprovalMessage('Your application has been automatically approved! You are now an Agent.')
       setIsApplying(false)
       setShowApplyDialog(false)
-      // Clear message after 5 seconds
       setTimeout(() => setApprovalMessage(''), 5000)
     }, 1500)
+  }
+
+  const handleEditChange = (field: keyof ProfileData, value: string) => {
+    setEditData({ ...editData, [field]: value })
+  }
+
+  const handleSaveProfile = async () => {
+    setIsSaving(true)
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      
+      // Update profile data
+      setProfileData(editData)
+      setSaveMessage('✓ Profile updated successfully!')
+      
+      // Switch back to view tab
+      setTimeout(() => {
+        setActiveTab('view')
+        setSaveMessage('')
+      }, 2000)
+    } catch (error) {
+      setSaveMessage('✗ Failed to update profile. Please try again.')
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const handleCancel = () => {
+    setEditData(profileData)
+    setActiveTab('view')
   }
 
   return (
@@ -42,103 +97,229 @@ export default function ProfilePage() {
         </Card>
       )}
 
-      <Card className="p-8 border-0 shadow-md">
-        <div className="flex items-start justify-between mb-8">
-          <div className="flex items-center gap-6">
-            <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-4xl font-bold">
-              PW
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900">Prosper Wedam</h2>
-              <p className="text-gray-600">prosperwedam4424@gmail.com</p>
-              <p className="text-sm text-gray-500 mt-2">Member since December 2024</p>
-            </div>
-          </div>
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-            <Edit2 className="mr-2 w-4 h-4" />
-            Edit Profile
-          </Button>
-        </div>
+      {/* Save Message */}
+      {saveMessage && (
+        <Card className={`p-4 border-0 shadow-md border-l-4 ${saveMessage.includes('✓') ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'}`}>
+          <p className={saveMessage.includes('✓') ? 'text-green-700 font-medium' : 'text-red-700 font-medium'}>{saveMessage}</p>
+        </Card>
+      )}
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-              <Mail className="w-5 h-5 text-blue-600" />
-              <div>
-                <p className="text-xs text-gray-600">Email</p>
-                <p className="font-medium text-gray-900">prosperwedam4424@gmail.com</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-              <Phone className="w-5 h-5 text-blue-600" />
-              <div>
-                <p className="text-xs text-gray-600">Phone</p>
-                <p className="font-medium text-gray-900">+233 XXX XXX XXX</p>
-              </div>
-            </div>
-          </div>
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-              <MapPin className="w-5 h-5 text-blue-600" />
-              <div>
-                <p className="text-xs text-gray-600">Location</p>
-                <p className="font-medium text-gray-900">Accra, Ghana</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-              <User className="w-5 h-5 text-blue-600" />
-              <div>
-                <p className="text-xs text-gray-600">Account Type</p>
-                <p className="font-medium text-gray-900 capitalize">{accountType}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="view">View Profile</TabsTrigger>
+          <TabsTrigger value="edit">Edit Profile</TabsTrigger>
+          <TabsTrigger value="security">Security</TabsTrigger>
+        </TabsList>
 
-        {/* Become an Agent Section */}
-        {accountType === 'customer' && (
-          <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Ready to Earn More?</h3>
-            <p className="text-gray-600 mb-4">
-              Become an agent and start earning commissions on every sale. Apply now and get instant approval!
-            </p>
-            <Button 
-              onClick={() => setShowApplyDialog(true)}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-            >
-              Become an Agent
-            </Button>
-          </div>
-        )}
+        {/* View Profile Tab */}
+        <TabsContent value="view" className="space-y-6">
+          <Card className="p-8 border-0 shadow-md">
+            <div className="flex items-start justify-between mb-8">
+              <div className="flex items-center gap-6">
+                <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-4xl font-bold">
+                  {profileData.fullName.split(' ').map(n => n[0]).join('')}
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">{profileData.fullName}</h2>
+                  <p className="text-gray-600">{profileData.email}</p>
+                  <p className="text-sm text-gray-500 mt-2">Member since December 2024</p>
+                </div>
+              </div>
+              <Button 
+                onClick={() => setActiveTab('edit')}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                <Edit2 className="mr-2 w-4 h-4" />
+                Edit Profile
+              </Button>
+            </div>
 
-        {/* Agent Status Badge */}
-        {accountType === 'agent' && (
-          <div className="mt-8 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
-            <div className="flex items-center gap-3">
-              <CheckCircle className="w-6 h-6 text-green-600" />
-              <div>
-                <h3 className="text-lg font-bold text-green-900">Agent Status Active</h3>
-                <p className="text-green-700">You are now an approved agent and can earn commissions!</p>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+                  <Mail className="w-5 h-5 text-blue-600" />
+                  <div>
+                    <p className="text-xs text-gray-600">Email</p>
+                    <p className="font-medium text-gray-900">{profileData.email}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+                  <Phone className="w-5 h-5 text-blue-600" />
+                  <div>
+                    <p className="text-xs text-gray-600">Phone</p>
+                    <p className="font-medium text-gray-900">{profileData.phone}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+                  <MapPin className="w-5 h-5 text-blue-600" />
+                  <div>
+                    <p className="text-xs text-gray-600">Location</p>
+                    <p className="font-medium text-gray-900">{profileData.location}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+                  <User className="w-5 h-5 text-blue-600" />
+                  <div>
+                    <p className="text-xs text-gray-600">Account Type</p>
+                    <p className="font-medium text-gray-900 capitalize">{accountType}</p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-      </Card>
 
-      <Card className="p-6 border-0 shadow-md">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Security Settings</h3>
-        <div className="space-y-3">
-          <Button variant="outline" className="w-full justify-start">
-            Change Password
-          </Button>
-          <Button variant="outline" className="w-full justify-start">
-            Two-Factor Authentication
-          </Button>
-          <Button variant="outline" className="w-full justify-start">
-            Active Sessions
-          </Button>
-        </div>
-      </Card>
+            {/* Bio Section */}
+            <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <p className="text-xs text-gray-600 mb-2">Bio</p>
+              <p className="text-gray-900">{profileData.bio}</p>
+            </div>
+
+            {/* Become an Agent Section */}
+            {accountType === 'customer' && (
+              <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Ready to Earn More?</h3>
+                <p className="text-gray-600 mb-4">
+                  Become an agent and start earning commissions on every sale. Apply now and get instant approval!
+                </p>
+                <Button 
+                  onClick={() => setShowApplyDialog(true)}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                >
+                  Become an Agent
+                </Button>
+              </div>
+            )}
+
+            {/* Agent Status Badge */}
+            {accountType === 'agent' && (
+              <div className="mt-8 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-6 h-6 text-green-600" />
+                  <div>
+                    <h3 className="text-lg font-bold text-green-900">Agent Status Active</h3>
+                    <p className="text-green-700">You are now an approved agent and can earn commissions!</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </Card>
+        </TabsContent>
+
+        {/* Edit Profile Tab */}
+        <TabsContent value="edit" className="space-y-6">
+          <Card className="p-8 border-0 shadow-md">
+            <h3 className="text-xl font-bold text-gray-900 mb-6">Edit Your Profile</h3>
+            
+            <div className="space-y-6">
+              {/* Full Name */}
+              <div>
+                <Label htmlFor="fullName" className="text-sm font-medium text-gray-700">Full Name</Label>
+                <Input
+                  id="fullName"
+                  type="text"
+                  value={editData.fullName}
+                  onChange={(e) => handleEditChange('fullName', e.target.value)}
+                  placeholder="Enter your full name"
+                  className="mt-2"
+                />
+              </div>
+
+              {/* Email */}
+              <div>
+                <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email Address</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={editData.email}
+                  onChange={(e) => handleEditChange('email', e.target.value)}
+                  placeholder="Enter your email"
+                  className="mt-2"
+                />
+              </div>
+
+              {/* Phone */}
+              <div>
+                <Label htmlFor="phone" className="text-sm font-medium text-gray-700">Phone Number</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={editData.phone}
+                  onChange={(e) => handleEditChange('phone', e.target.value)}
+                  placeholder="Enter your phone number"
+                  className="mt-2"
+                />
+              </div>
+
+              {/* Location */}
+              <div>
+                <Label htmlFor="location" className="text-sm font-medium text-gray-700">Location</Label>
+                <Input
+                  id="location"
+                  type="text"
+                  value={editData.location}
+                  onChange={(e) => handleEditChange('location', e.target.value)}
+                  placeholder="Enter your location"
+                  className="mt-2"
+                />
+              </div>
+
+              {/* Bio */}
+              <div>
+                <Label htmlFor="bio" className="text-sm font-medium text-gray-700">Bio</Label>
+                <textarea
+                  id="bio"
+                  value={editData.bio}
+                  onChange={(e) => handleEditChange('bio', e.target.value)}
+                  placeholder="Tell us about yourself"
+                  rows={4}
+                  className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-6">
+                <Button
+                  onClick={handleSaveProfile}
+                  disabled={isSaving}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  <Save className="mr-2 w-4 h-4" />
+                  {isSaving ? 'Saving...' : 'Save Changes'}
+                </Button>
+                <Button
+                  onClick={handleCancel}
+                  disabled={isSaving}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  <X className="mr-2 w-4 h-4" />
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </TabsContent>
+
+        {/* Security Tab */}
+        <TabsContent value="security" className="space-y-6">
+          <Card className="p-6 border-0 shadow-md">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Security Settings</h3>
+            <div className="space-y-3">
+              <Button variant="outline" className="w-full justify-start">
+                Change Password
+              </Button>
+              <Button variant="outline" className="w-full justify-start">
+                Two-Factor Authentication
+              </Button>
+              <Button variant="outline" className="w-full justify-start">
+                Active Sessions
+              </Button>
+            </div>
+          </Card>
+        </TabsContent>
+      </Tabs>
 
       {/* Apply as Agent Dialog */}
       <Dialog open={showApplyDialog} onOpenChange={setShowApplyDialog}>
