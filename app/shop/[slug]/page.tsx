@@ -61,7 +61,6 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
-  const [isBuyDialogOpen, setIsBuyDialogOpen] = useState(false)
   const [formData, setFormData] = useState<BuyFormData>({
     beneficiaryNumber: '',
     email: '',
@@ -137,14 +136,6 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
     setFormData({ ...formData, beneficiaryNumber: cleaned })
   }
 
-  const handleBuyClick = (product: Product) => {
-    setSelectedProduct(product)
-    setFormData({ ...formData, productId: product.id })
-    setErrorMessage('')
-    setSuccessMessage('')
-    setIsBuyDialogOpen(true)
-  }
-
   const handleProceedToPayment = async () => {
     if (!selectedProduct) return
 
@@ -166,9 +157,9 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
 
       setSuccessMessage('✓ Payment successful! Your data will be delivered shortly.')
       setTimeout(() => {
-        setIsBuyDialogOpen(false)
         setFormData({ beneficiaryNumber: '', email: '', productId: '' })
         setSuccessMessage('')
+        setSelectedProduct(null)
       }, 2000)
     } catch {
       setErrorMessage('Payment failed. Please try again.')
@@ -256,10 +247,15 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
                   </div>
                 </div>
 
-                <Dialog open={isBuyDialogOpen && selectedProduct?.id === product.id} onOpenChange={setIsBuyDialogOpen}>
+                <Dialog>
                   <DialogTrigger asChild>
                     <Button
-                      onClick={() => handleBuyClick(product)}
+                      onClick={() => {
+                        setSelectedProduct(product)
+                        setFormData({ ...formData, productId: product.id })
+                        setErrorMessage('')
+                        setSuccessMessage('')
+                      }}
                       className={`w-full bg-gradient-to-r ${getNetworkColor(product.network)} ${
                         product.network === 'MTN' ? 'text-black hover:from-yellow-500 hover:to-yellow-600' : 'text-white'
                       } font-semibold rounded-lg`}
@@ -344,7 +340,6 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
                           {isProcessing ? 'Processing...' : 'Proceed to Payment'}
                         </Button>
                         <Button
-                          onClick={() => setIsBuyDialogOpen(false)}
                           variant="outline"
                           disabled={isProcessing}
                           className="flex-1"
