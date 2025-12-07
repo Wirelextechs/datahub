@@ -4,7 +4,7 @@ import { Pool } from 'pg'
 const pool = new Pool({
   host: 'localhost',
   port: 5432,
-  database: 'datahub_db',
+  database: process.env.PGDATABASE || 'datahub_db',
   user: process.env.PGUSER,
   password: process.env.PGPASSWORD,
 })
@@ -16,11 +16,21 @@ export async function GET(
   try {
     const { slug } = await params
 
+    console.log('Fetching shop with slug:', slug)
+    console.log('Database config:', {
+      host: 'localhost',
+      port: 5432,
+      database: process.env.PGDATABASE,
+      user: process.env.PGUSER,
+    })
+
     // Get shop data
     const shopResult = await pool.query(
       'SELECT id, user_id, name, slug, description, owner_name FROM shops WHERE slug = $1',
       [slug]
     )
+
+    console.log('Shop query result:', shopResult.rows)
 
     if (shopResult.rows.length === 0) {
       return NextResponse.json(
@@ -37,6 +47,8 @@ export async function GET(
       [shop.id]
     )
 
+    console.log('Products query result:', productsResult.rows)
+
     return NextResponse.json({
       shop,
       products: productsResult.rows,
@@ -44,7 +56,7 @@ export async function GET(
   } catch (error) {
     console.error('Error fetching shop:', error)
     return NextResponse.json(
-      { message: 'An error occurred while fetching shop' },
+      { message: 'An error occurred while fetching shop', error: String(error) },
       { status: 500 }
     )
   }
