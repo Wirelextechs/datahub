@@ -25,7 +25,7 @@ interface Shop {
   id: number
   user_id: number
   name: string
-  slug: string
+  username: string
   description?: string
   owner_name?: string
 }
@@ -73,7 +73,9 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
   const fetchShopData = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/shops/${params.slug}`)
+      // Extract username from slug (remove @ if present)
+      const username = params.slug.replace(/^@/, '')
+      const response = await fetch(`/api/shops/${username}`)
 
       if (!response.ok) {
         setError('Shop not found')

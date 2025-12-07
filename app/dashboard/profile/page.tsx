@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { User, Mail, Phone, MapPin, Edit2, CheckCircle, Save, X } from 'lucide-react'
+import { User, Mail, Phone, MapPin, Edit2, CheckCircle, Save, X, AlertCircle } from 'lucide-react'
 
 interface ProfileData {
   fullName: string
@@ -25,6 +25,8 @@ export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState('view')
   const [isSaving, setIsSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState('')
+  const [usernameSet, setUsernameSet] = useState(true) // Set to true if username already exists
+  const [username, setUsername] = useState('prosperwedam') // Demo username
 
   // Profile data state
   const [profileData, setProfileData] = useState<ProfileData>({
@@ -37,6 +39,7 @@ export default function ProfilePage() {
 
   // Edit form state
   const [editData, setEditData] = useState<ProfileData>(profileData)
+  const [editUsername, setEditUsername] = useState(username)
 
   const handleApplyAsAgent = async () => {
     setIsApplying(true)
@@ -61,6 +64,13 @@ export default function ProfilePage() {
       
       // Update profile data
       setProfileData(editData)
+      
+      // If username wasn't set before, set it now
+      if (!usernameSet && editUsername) {
+        setUsername(editUsername)
+        setUsernameSet(true)
+      }
+      
       setSaveMessage('✓ Profile updated successfully!')
       
       // Switch back to view tab
@@ -77,6 +87,7 @@ export default function ProfilePage() {
 
   const handleCancel = () => {
     setEditData(profileData)
+    setEditUsername(username)
     setActiveTab('view')
   }
 
@@ -133,6 +144,13 @@ export default function ProfilePage() {
                 <Edit2 className="mr-2 w-4 h-4" />
                 Edit Profile
               </Button>
+            </div>
+
+            {/* Username Section */}
+            <div className="mb-6 p-4 bg-purple-50 rounded-lg border border-purple-200">
+              <p className="text-xs text-gray-600 mb-2">Shop Username (Permanent)</p>
+              <p className="text-lg font-bold text-gray-900">@{username}</p>
+              <p className="text-sm text-gray-600 mt-2">This username is used for your shop link and cannot be changed</p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -213,6 +231,45 @@ export default function ProfilePage() {
             <h3 className="text-xl font-bold text-gray-900 mb-6">Edit Your Profile</h3>
             
             <div className="space-y-6">
+              {/* Username Field - Only editable if not set */}
+              {!usernameSet && (
+                <div>
+                  <Label htmlFor="username" className="text-sm font-medium text-gray-700">
+                    Shop Username
+                  </Label>
+                  <div className="mt-2 p-4 bg-amber-50 border border-amber-200 rounded-lg mb-4">
+                    <div className="flex gap-3">
+                      <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                      <div className="text-sm text-amber-800">
+                        <p className="font-semibold mb-1">Important: This username cannot be changed later</p>
+                        <p>Your shop link will be: <span className="font-mono font-bold">https://datahub-kohl.vercel.app/shop/@{editUsername || 'your-username'}</span></p>
+                        <p className="mt-2">Choose wisely as this will be permanent and used for all your shop links.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <Input
+                    id="username"
+                    type="text"
+                    value={editUsername}
+                    onChange={(e) => setEditUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))}
+                    placeholder="Enter your shop username"
+                    className="mt-2"
+                  />
+                  <p className="text-xs text-gray-500 mt-2">Lowercase letters, numbers, hyphens, and underscores only</p>
+                </div>
+              )}
+
+              {/* Username Display - If already set */}
+              {usernameSet && (
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">Shop Username (Permanent)</Label>
+                  <div className="mt-2 p-4 bg-purple-50 rounded-lg border border-purple-200">
+                    <p className="text-lg font-bold text-gray-900">@{username}</p>
+                    <p className="text-sm text-gray-600 mt-2">This username cannot be changed. Your shop link is: <span className="font-mono font-bold">https://datahub-kohl.vercel.app/shop/@{username}</span></p>
+                  </div>
+                </div>
+              )}
+
               {/* Full Name */}
               <div>
                 <Label htmlFor="fullName" className="text-sm font-medium text-gray-700">Full Name</Label>
@@ -282,7 +339,7 @@ export default function ProfilePage() {
               <div className="flex gap-3 pt-6">
                 <Button
                   onClick={handleSaveProfile}
-                  disabled={isSaving}
+                  disabled={isSaving || (!usernameSet && !editUsername)}
                   className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   <Save className="mr-2 w-4 h-4" />

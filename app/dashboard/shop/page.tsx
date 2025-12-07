@@ -9,20 +9,9 @@ interface Shop {
   id: number
   user_id: number
   name: string
-  slug: string
+  username: string
   description?: string
   owner_name?: string
-}
-
-// Function to convert shop name to slug
-const generateSlug = (name: string): string => {
-  return name
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '') // Remove special characters
-    .replace(/\s+/g, '-') // Replace spaces with hyphens
-    .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
-    .replace(/^-+|-+$/g, '') // Remove leading/trailing hyphens
 }
 
 export default function ShopPage() {
@@ -31,8 +20,8 @@ export default function ShopPage() {
   const [copied, setCopied] = useState(false)
   const [shopName, setShopName] = useState('')
   const [shopDescription, setShopDescription] = useState('')
-  const [generatedSlug, setGeneratedSlug] = useState('')
   const [isSaving, setIsSaving] = useState(false)
+  const [saveMessage, setSaveMessage] = useState('')
 
   useEffect(() => {
     // For now, use demo shop data
@@ -40,33 +29,28 @@ export default function ShopPage() {
       id: 1,
       user_id: 1,
       name: "Prosper's Data Shop",
-      slug: 'prosper-wedam-data-shop',
+      username: 'prosperwedam',
       description: 'Quality data packages at affordable prices',
       owner_name: 'Prosper Wedam',
     }
     setShop(demoShop)
     setShopName(demoShop.name)
     setShopDescription(demoShop.description || '')
-    setGeneratedSlug(demoShop.slug)
     setLoading(false)
   }, [])
 
-  // Update slug in real-time when shop name changes
   const handleShopNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value
     setShopName(newName)
-    
-    // Generate slug from the new name
-    const newSlug = generateSlug(newName)
-    setGeneratedSlug(newSlug)
   }
 
   const handleShopDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setShopDescription(e.target.value)
   }
 
-  const shopLink = generatedSlug 
-    ? `${typeof window !== 'undefined' ? window.location.origin : 'https://datahub-kohl.vercel.app'}/shop/${generatedSlug}` 
+  // Shop link uses username (permanent)
+  const shopLink = shop?.username 
+    ? `${typeof window !== 'undefined' ? window.location.origin : 'https://datahub-kohl.vercel.app'}/shop/@${shop.username}` 
     : ''
 
   const copyToClipboard = () => {
@@ -86,17 +70,21 @@ export default function ShopPage() {
         setShop({
           ...shop,
           name: shopName,
-          slug: generatedSlug,
           description: shopDescription,
         })
       }
       
-      // Show success message
+      setSaveMessage('✓ Shop updated successfully!')
+      
+      // Clear message after 3 seconds
       setTimeout(() => {
-        setIsSaving(false)
-      }, 1000)
+        setSaveMessage('')
+      }, 3000)
+      
+      setIsSaving(false)
     } catch (error) {
       console.error('Error saving shop:', error)
+      setSaveMessage('✗ Failed to update shop. Please try again.')
       setIsSaving(false)
     }
   }
@@ -118,6 +106,13 @@ export default function ShopPage() {
         <h1 className="text-3xl font-bold text-gray-900 mb-2">My Shop</h1>
         <p className="text-gray-600">Manage your personal data shop and storefront</p>
       </div>
+
+      {/* Save Message */}
+      {saveMessage && (
+        <Card className={`p-4 border-0 shadow-md border-l-4 ${saveMessage.includes('✓') ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'}`}>
+          <p className={saveMessage.includes('✓') ? 'text-green-700 font-medium' : 'text-red-700 font-medium'}>{saveMessage}</p>
+        </Card>
+      )}
 
       <Card className="p-8 border-0 shadow-md bg-gradient-to-br from-blue-50 to-purple-50">
         <div className="mb-6">
@@ -149,76 +144,71 @@ export default function ShopPage() {
             </Button>
           </div>
           {copied && (
-            <p className="text-xs text-green-600 mt-2">✓ Link copied to clipboard!</p>
+            <p className="text-sm text-green-600 mt-2">✓ Copied to clipboard!</p>
           )}
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <p className="text-xs text-gray-600 mb-1">Shop Status</p>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span className="font-semibold text-gray-900">Active</span>
-            </div>
-          </div>
-          <div>
-            <p className="text-xs text-gray-600 mb-1">Shop Slug</p>
-            <p className="font-semibold text-gray-900 break-all">{generatedSlug || 'Not set'}</p>
-          </div>
+          <p className="text-xs text-gray-500 mt-2">
+            Your shop username is <span className="font-mono font-bold">@{shop?.username}</span> and cannot be changed
+          </p>
         </div>
       </Card>
 
-      <Card className="p-6 border-0 shadow-md">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Shop Customization</h3>
-        <div className="space-y-4">
+      <Card className="p-8 border-0 shadow-md">
+        <h3 className="text-xl font-bold text-gray-900 mb-6">Shop Settings</h3>
+        
+        <div className="space-y-6">
+          {/* Shop Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Shop Name</label>
+            <label className="text-sm font-medium text-gray-700">Shop Name (Storefront Hero Name)</label>
             <input
               type="text"
-              placeholder="Enter your shop name"
               value={shopName}
               onChange={handleShopNameChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your shop name"
+              className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <p className="text-xs text-gray-500 mt-2">
-              💡 The shop slug will automatically update based on your shop name
-            </p>
+            <p className="text-xs text-gray-500 mt-2">This is the name displayed on your shop storefront and can be changed anytime</p>
           </div>
+
+          {/* Shop Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Shop Description</label>
+            <label className="text-sm font-medium text-gray-700">Shop Description</label>
             <textarea
-              placeholder="Describe your shop"
               value={shopDescription}
               onChange={handleShopDescriptionChange}
+              placeholder="Describe your shop and the data you offer"
               rows={4}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <Button 
-            onClick={handleSaveChanges}
-            disabled={isSaving}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            <Settings className="mr-2 w-4 h-4" />
-            {isSaving ? 'Saving...' : 'Save Changes'}
-          </Button>
+
+          {/* Save Button */}
+          <div className="flex gap-3 pt-6">
+            <Button
+              onClick={handleSaveChanges}
+              disabled={isSaving}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              {isSaving ? 'Saving...' : 'Save Changes'}
+            </Button>
+          </div>
         </div>
       </Card>
 
-      <Card className="p-6 border-0 shadow-md">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Shop Statistics</h3>
-        <div className="grid md:grid-cols-3 gap-4">
-          <div className="p-4 bg-blue-50 rounded-lg">
-            <p className="text-sm text-gray-600 mb-1">Total Visits</p>
-            <p className="text-3xl font-bold text-blue-600">1,234</p>
+      {/* Shop Info Card */}
+      <Card className="p-6 border-0 shadow-md bg-blue-50 border-l-4 border-blue-500">
+        <h3 className="text-lg font-bold text-gray-900 mb-4">Shop Information</h3>
+        <div className="space-y-3 text-sm text-gray-700">
+          <div>
+            <p className="font-semibold text-gray-900">Shop Username (Permanent)</p>
+            <p className="text-gray-600">@{shop?.username}</p>
           </div>
-          <div className="p-4 bg-green-50 rounded-lg">
-            <p className="text-sm text-gray-600 mb-1">Total Sales</p>
-            <p className="text-3xl font-bold text-green-600">156</p>
+          <div>
+            <p className="font-semibold text-gray-900">Shop Name</p>
+            <p className="text-gray-600">{shopName}</p>
           </div>
-          <div className="p-4 bg-purple-50 rounded-lg">
-            <p className="text-sm text-gray-600 mb-1">Conversion Rate</p>
-            <p className="text-3xl font-bold text-purple-600">12.6%</p>
+          <div>
+            <p className="font-semibold text-gray-900">Owner</p>
+            <p className="text-gray-600">{shop?.owner_name}</p>
           </div>
         </div>
       </Card>
