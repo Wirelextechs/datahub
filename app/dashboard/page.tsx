@@ -3,6 +3,7 @@
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import ShopLink from '@/components/dashboard/ShopLink'
 import {
   Wallet,
   ShoppingCart,
@@ -79,6 +80,9 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-8">
+      {/* Shop Link Section */}
+      <ShopLink />
+
       {/* Stats Grid - Customer Only */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {stats.map((stat, idx) => {
