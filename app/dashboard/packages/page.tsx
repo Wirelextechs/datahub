@@ -265,7 +265,7 @@ export default function PackagesPage() {
               </div>
             </div>
 
-            <Dialog open={isBuyDialogOpen && selectedPackage === pkg} onOpenChange={setIsBuyDialogOpen}>
+            <Dialog open={isBuyDialogOpen} onOpenChange={setIsBuyDialogOpen}>
               <DialogTrigger asChild>
                 <Button
                   onClick={() => handleBuyClick(pkg)}
