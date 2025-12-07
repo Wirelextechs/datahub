@@ -70,9 +70,9 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
-  try {
-    const { slug } = await params
+  const { slug } = await params
 
+  try {
     // Try to fetch from database first if credentials are available
     if (process.env.PGUSER && process.env.PGPASSWORD) {
       try {
@@ -111,7 +111,7 @@ export async function GET(
 
         await pool.end()
       } catch (dbError) {
-        console.log('Database query failed, using mock data:', dbError)
+        console.log('Database query failed, using mock data')
       }
     }
 
@@ -125,17 +125,16 @@ export async function GET(
       { status: 404 }
     )
   } catch (error) {
-    console.error('Error fetching shop:', error)
+    console.error('Error in GET handler:', error)
     
-    // Try to return mock data even on error
-    const slug = (await params).slug
+    // Always try to return mock data as fallback
     if (MOCK_SHOPS[slug]) {
       return NextResponse.json(MOCK_SHOPS[slug])
     }
 
     return NextResponse.json(
-      { message: 'An error occurred while fetching shop' },
-      { status: 500 }
+      { message: 'Shop not found' },
+      { status: 404 }
     )
   }
 }
