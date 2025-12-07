@@ -73,8 +73,12 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
   const fetchShopData = useCallback(async () => {
     try {
       setLoading(true)
-      // Extract username from slug (remove @ if present)
-      const username = params.slug.replace(/^@/, '')
+      // Extract username from slug - handle both @username and username formats
+      let username = params.slug
+      if (username.startsWith('@')) {
+        username = username.substring(1)
+      }
+      
       const response = await fetch(`/api/shops/${username}`)
 
       if (!response.ok) {
