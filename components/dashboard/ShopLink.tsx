@@ -3,13 +3,15 @@
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Copy, ExternalLink } from 'lucide-react'
+import { Copy, ExternalLink, Lock, AlertCircle } from 'lucide-react'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
 interface ShopLinkProps {
   username?: string
+  isApprovedAgent?: boolean
 }
 
-export default function ShopLink({ username = 'prosperwedam' }: ShopLinkProps) {
+export default function ShopLink({ username = 'prosperwedam', isApprovedAgent = false }: ShopLinkProps) {
   const [copied, setCopied] = useState(false)
 
   const shopLink = `https://datahub-kohl.vercel.app/shop/@${username}`
@@ -18,6 +20,28 @@ export default function ShopLink({ username = 'prosperwedam' }: ShopLinkProps) {
     navigator.clipboard.writeText(shopLink)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  // Only show shop link for approved agents
+  if (!isApprovedAgent) {
+    return (
+      <Card className="p-6 border-0 shadow-md bg-gradient-to-br from-amber-50 to-orange-50">
+        <div className="space-y-4">
+          <div className="flex items-start gap-3">
+            <Lock className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="font-semibold text-gray-900 mb-1">Shop Link Locked</p>
+              <p className="text-sm text-gray-700 mb-3">
+                Your shop link will be available once you&apos;re approved as an agent. Apply now to start selling!
+              </p>
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                Apply to Become an Agent
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Card>
+    )
   }
 
   return (

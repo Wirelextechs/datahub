@@ -91,3 +91,26 @@ Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allow
  ✓ Compiled /dashboard/packages in 1054ms
  GET /dashboard/packages 200 in 1487ms
  ✓ Compiled in 206ms
+ ○ Compiling /dashboard/orders ...
+ ✓ Compiled /dashboard/orders in 520ms
+ GET /dashboard/orders 200 in 618ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 577ms
+ GET /dashboard 200 in 672ms
+ ○ Compiling /dashboard/profile ...
+ ✓ Compiled /dashboard/profile in 613ms
+ GET /dashboard/profile 200 in 785ms
+ GET /dashboard/profile 200 in 98ms
+ GET /dashboard 200 in 97ms
+ GET /dashboard/profile 200 in 101ms
+ GET /dashboard/profile 200 in 145ms
+ GET /dashboard/profile 200 in 104ms
+ ✓ Compiled in 270ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/profile 200 in 273ms
+ GET /dashboard/profile 200 in 140ms
+ ✓ Compiled /favicon.ico in 230ms
+ GET /favicon.ico?favicon.bf3c9292.ico 200 in 578ms
+ ✓ Compiled in 295ms
+ ✓ Compiled in 283ms
+ ✓ Compiled in 163ms

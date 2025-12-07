@@ -14,6 +14,11 @@ import {
 } from 'lucide-react'
 
 export default function Dashboard() {
+  // TODO: Get user data from session/context
+  // For now, using mock data
+  const isApprovedAgent = false // This should come from user session
+  const username = 'prosperwedam' // This should come from user session
+
   // Sample data - Customer only sees balance and orders
   const stats = [
     {
@@ -80,8 +85,8 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-8">
-      {/* Shop Link Section */}
-      <ShopLink />
+      {/* Shop Link Section - Only for approved agents */}
+      <ShopLink username={username} isApprovedAgent={isApprovedAgent} />
 
       {/* Stats Grid - Customer Only */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
