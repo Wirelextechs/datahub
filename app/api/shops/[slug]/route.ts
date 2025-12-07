@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Pool } from 'pg'
 
 // Mock shop data for demonstration
 const MOCK_SHOPS: Record<string, { shop: Record<string, unknown>; products: Record<string, unknown>[] }> = {
@@ -19,9 +18,9 @@ const MOCK_SHOPS: Record<string, { shop: Record<string, unknown>; products: Reco
         network: 'MTN',
         size: '1GB',
         validity: 'NON EXPIRE',
-        base_price: '4.55',
-        profit_margin: '0.45',
-        selling_price: '5.00',
+        base_price: 4.55,
+        profit_margin: 0.45,
+        selling_price: 5.00,
       },
       {
         id: 2,
@@ -29,9 +28,9 @@ const MOCK_SHOPS: Record<string, { shop: Record<string, unknown>; products: Reco
         network: 'MTN',
         size: '2GB',
         validity: 'NON EXPIRE',
-        base_price: '9.09',
-        profit_margin: '0.91',
-        selling_price: '10.00',
+        base_price: 9.09,
+        profit_margin: 0.91,
+        selling_price: 10.00,
       },
       {
         id: 3,
@@ -39,9 +38,9 @@ const MOCK_SHOPS: Record<string, { shop: Record<string, unknown>; products: Reco
         network: 'AirtelTigo',
         size: '3GB',
         validity: 'NON EXPIRE',
-        base_price: '13.64',
-        profit_margin: '1.36',
-        selling_price: '15.00',
+        base_price: 13.64,
+        profit_margin: 1.36,
+        selling_price: 15.00,
       },
       {
         id: 4,
@@ -49,9 +48,9 @@ const MOCK_SHOPS: Record<string, { shop: Record<string, unknown>; products: Reco
         network: 'Telecel',
         size: '5GB',
         validity: 'NON EXPIRE',
-        base_price: '22.73',
-        profit_margin: '2.27',
-        selling_price: '25.00',
+        base_price: 22.73,
+        profit_margin: 2.27,
+        selling_price: 25.00,
       },
       {
         id: 5,
@@ -59,29 +58,12 @@ const MOCK_SHOPS: Record<string, { shop: Record<string, unknown>; products: Reco
         network: 'MTN',
         size: '1GB',
         validity: 'NON EXPIRE',
-        base_price: '4.55',
-        profit_margin: '0.75',
-        selling_price: '5.30',
+        base_price: 4.55,
+        profit_margin: 0.75,
+        selling_price: 5.30,
       },
     ],
   },
-}
-
-let pool: Pool | null = null
-
-// Try to initialize the database pool if credentials are available
-if (process.env.PGUSER && process.env.PGPASSWORD) {
-  try {
-    pool = new Pool({
-      host: 'localhost',
-      port: 5432,
-      database: process.env.PGDATABASE || 'datahub_db',
-      user: process.env.PGUSER,
-      password: process.env.PGPASSWORD,
-    })
-  } catch (error) {
-    console.log('Database pool initialization skipped')
-  }
 }
 
 export async function GET(
@@ -91,35 +73,9 @@ export async function GET(
   const { slug } = await params
 
   try {
-    // Try to fetch from database first if pool is available
-    if (pool) {
-      try {
-        // Get shop data
-        const shopResult = await pool.query(
-          'SELECT id, user_id, name, slug, description, owner_name FROM shops WHERE slug = $1',
-          [slug]
-        )
-
-        if (shopResult.rows.length > 0) {
-          const shop = shopResult.rows[0]
-
-          // Get shop products
-          const productsResult = await pool.query(
-            'SELECT id, name, network, size, validity, base_price, profit_margin, selling_price FROM shop_products WHERE shop_id = $1 ORDER BY created_at DESC',
-            [shop.id]
-          )
-
-          return NextResponse.json({
-            shop,
-            products: productsResult.rows,
-          })
-        }
-      } catch {
-        console.log('Database query failed, using mock data')
-      }
-    }
-
-    // Fall back to mock data
+    // For now, always use mock data since Vercel doesn't have database access
+    // In production, you would connect to a cloud database like Supabase, Neon, or AWS RDS
+    
     if (MOCK_SHOPS[slug]) {
       return NextResponse.json(MOCK_SHOPS[slug])
     }
