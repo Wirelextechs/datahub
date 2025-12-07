@@ -17,7 +17,7 @@ export default function SettingsPage() {
     smsNotifications: true,
   })
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string | boolean) => {
     setSettings(prev => ({
       ...prev,
       [field]: value
