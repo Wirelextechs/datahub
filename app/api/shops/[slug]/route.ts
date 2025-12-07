@@ -66,24 +66,6 @@ const MOCK_SHOPS: Record<string, any> = {
   },
 }
 
-let pool: any = null
-
-// Try to initialize the database pool if credentials are available
-if (process.env.PGUSER && process.env.PGPASSWORD) {
-  try {
-    const { Pool } = require('pg')
-    pool = new Pool({
-      host: 'localhost',
-      port: 5432,
-      database: process.env.PGDATABASE || 'datahub_db',
-      user: process.env.PGUSER,
-      password: process.env.PGPASSWORD,
-    })
-  } catch (error) {
-    console.log('Database pool initialization skipped')
-  }
-}
-
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
@@ -91,9 +73,19 @@ export async function GET(
   try {
     const { slug } = await params
 
-    // Try to fetch from database first
-    if (pool) {
+    // Try to fetch from database first if credentials are available
+    if (process.env.PGUSER && process.env.PGPASSWORD) {
       try {
+        const { Pool } = require('pg')
+        const pool = new Pool({
+          host: 'localhost',
+          port: 5432,
+          database: process.env.PGDATABASE || 'datahub_db',
+          user: process.env.PGUSER,
+          password: process.env.PGPASSWORD,
+          connectionTimeoutMillis: 5000,
+        })
+
         // Get shop data
         const shopResult = await pool.query(
           'SELECT id, user_id, name, slug, description, owner_name FROM shops WHERE slug = $1',
@@ -109,13 +101,17 @@ export async function GET(
             [shop.id]
           )
 
+          await pool.end()
+
           return NextResponse.json({
             shop,
             products: productsResult.rows,
           })
         }
+
+        await pool.end()
       } catch (dbError) {
-        console.log('Database query failed, falling back to mock data:', dbError)
+        console.log('Database query failed, using mock data:', dbError)
       }
     }
 
@@ -130,6 +126,13 @@ export async function GET(
     )
   } catch (error) {
     console.error('Error fetching shop:', error)
+    
+    // Try to return mock data even on error
+    const slug = (await params).slug
+    if (MOCK_SHOPS[slug]) {
+      return NextResponse.json(MOCK_SHOPS[slug])
+    }
+
     return NextResponse.json(
       { message: 'An error occurred while fetching shop' },
       { status: 500 }
