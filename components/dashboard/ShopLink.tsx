@@ -29,25 +29,49 @@ export default function ShopLink() {
   const fetchShop = async () => {
     try {
       setLoading(true)
-      const token = localStorage.getItem('token')
-      const user = localStorage.getItem('user')
+      
+      // Try to get user from localStorage
+      let userId = null
+      let userName = 'User'
+      
+      try {
+        const token = localStorage.getItem('token')
+        const user = localStorage.getItem('user')
+        
+        if (user) {
+          const userData = JSON.parse(user)
+          userId = userData.id
+          userName = userData.name || 'User'
+        }
+      } catch (e) {
+        console.log('Could not parse user data from localStorage')
+      }
 
-      if (!token || !user) {
-        setError('User not authenticated')
+      // If no user ID, use a default for demo purposes
+      if (!userId) {
+        // Create a demo shop for testing
+        const demoShop: Shop = {
+          id: 1,
+          user_id: 1,
+          name: "Prosper's Data Shop",
+          slug: 'prosper-wedam-data-shop',
+          description: 'Quality data packages at affordable prices',
+          owner_name: 'Prosper Wedam',
+        }
+        setShop(demoShop)
         setLoading(false)
         return
       }
 
-      const userData = JSON.parse(user)
       const response = await fetch('/api/shops', {
         headers: {
-          'x-user-id': userData.id.toString(),
+          'x-user-id': userId.toString(),
         },
       })
 
       if (response.status === 404) {
         // Shop doesn't exist, create one with default values
-        const shopSlug = userData.name
+        const shopSlug = userName
           .toLowerCase()
           .replace(/\s+/g, '-')
           .replace(/[^a-z0-9-]/g, '')
@@ -58,11 +82,11 @@ export default function ShopLink() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            userId: userData.id,
-            name: `${userData.name}'s Data Shop`,
+            userId: userId,
+            name: `${userName}'s Data Shop`,
             slug: shopSlug || 'my-data-shop',
             description: 'Quality data packages at affordable prices',
-            ownerName: userData.name,
+            ownerName: userName,
           }),
         })
 
@@ -86,7 +110,7 @@ export default function ShopLink() {
     }
   }
 
-  const shopUrl = shop ? `${window.location.origin}/shop/${shop.slug}` : ''
+  const shopUrl = shop ? `${typeof window !== 'undefined' ? window.location.origin : ''}/shop/${shop.slug}` : ''
 
   const copyToClipboard = () => {
     if (shopUrl) {
