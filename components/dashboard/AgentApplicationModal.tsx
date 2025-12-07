@@ -95,7 +95,7 @@ export default function AgentApplicationModal({
             <div className="text-center space-y-2">
               <h3 className="font-semibold text-lg text-gray-900">Application Submitted!</h3>
               <p className="text-sm text-gray-600">
-                Thank you for applying. We'll review your application and notify you soon.
+                Thank you for applying. We&apos;ll review your application and notify you soon.
               </p>
             </div>
           </div>
@@ -111,7 +111,7 @@ export default function AgentApplicationModal({
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Business Name *</label>
               <Input
-                placeholder="e.g., Prosper's Data Solutions"
+                placeholder="e.g., Prosper&apos;s Data Solutions"
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
                 required
@@ -153,7 +153,7 @@ export default function AgentApplicationModal({
               <ul className="text-xs text-blue-800 space-y-1">
                 <li>✓ Our team reviews your application</li>
                 <li>✓ We verify your business details</li>
-                <li>✓ You'll receive approval notification via email</li>
+                <li>✓ You&apos;ll receive approval notification via email</li>
                 <li>✓ Your shop link becomes active immediately</li>
               </ul>
             </div>

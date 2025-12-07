@@ -3,8 +3,7 @@
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Copy, ExternalLink, Lock, AlertCircle } from 'lucide-react'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Copy, ExternalLink, Lock } from 'lucide-react'
 import AgentApplicationModal from './AgentApplicationModal'
 
 interface ShopLinkProps {
