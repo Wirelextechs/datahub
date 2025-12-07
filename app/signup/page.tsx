@@ -67,7 +67,7 @@ export default function SignupPage() {
               DataHub
             </span>
           </div>
-          <p className="text-gray-400">Join Ghana's #1 Data Hub Platform</p>
+          <p className="text-gray-400">Join Ghana&apos;s #1 Data Hub Platform</p>
         </div>
 
         {/* Signup Card */}

@@ -158,7 +158,7 @@ export default function Home() {
           <div className={`inline-block mb-8 px-4 py-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30 rounded-full backdrop-blur-sm transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             <span className="text-sm font-semibold bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-blue-400" />
-              Ghana's #1 Data Hub Platform
+              Ghana&apos;s #1 Data Hub Platform
             </span>
           </div>
 
@@ -419,7 +419,7 @@ export default function Home() {
 
                 {/* Review Text */}
                 <p className="text-gray-700 mb-6 leading-relaxed italic">
-                  "{testimonial.text}"
+                  &quot;{testimonial.text}&quot;
                 </p>
 
                 {/* User Info */}
@@ -554,7 +554,7 @@ export default function Home() {
                 <span className="text-lg font-bold text-white">DataHub</span>
               </div>
               <p className="text-gray-400">
-                Ghana's #1 data hub solution for instant delivery and secure transactions.
+                Ghana&apos;s #1 data hub solution for instant delivery and secure transactions.
               </p>
             </div>
 

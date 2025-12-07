@@ -191,7 +191,7 @@ export default function AdminPage() {
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="p-6 border-0 shadow-md bg-gradient-to-br from-blue-50 to-blue-100">
-          <h4 className="font-bold text-gray-900 mb-2">📊 Today's Stats</h4>
+          <h4 className="font-bold text-gray-900 mb-2">📊 Today&apos;s Stats</h4>
           <div className="space-y-2">
             <p className="text-sm text-gray-700"><span className="font-semibold">New Users:</span> 245</p>
             <p className="text-sm text-gray-700"><span className="font-semibold">New Orders:</span> 1,234</p>

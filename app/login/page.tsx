@@ -70,7 +70,7 @@ export default function LoginPage() {
               DataHub
             </span>
           </div>
-          <p className="text-gray-400">Ghana's #1 Data Hub Platform</p>
+          <p className="text-gray-400">Ghana&apos;s #1 Data Hub Platform</p>
         </div>
 
         {/* Login Card */}
@@ -167,7 +167,7 @@ export default function LoginPage() {
 
           {/* Sign Up Link */}
           <p className="text-center text-gray-400 text-sm mt-6">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/signup" className="text-blue-400 hover:text-blue-300 font-semibold transition-colors">
               Sign up here
             </Link>

@@ -146,7 +146,7 @@ export default function ProfilePage() {
           <DialogHeader>
             <DialogTitle>Apply to Become an Agent</DialogTitle>
             <DialogDescription>
-              Your application will be automatically approved. Once approved, you'll be able to earn commissions on every sale.
+              Your application will be automatically approved. Once approved, you&apos;ll be able to earn commissions on every sale.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
