@@ -756,7 +756,7 @@ export default function MyShopPage() {
                           <AlertDialogHeader>
                             <AlertDialogTitle>Delete Product</AlertDialogTitle>
                             <AlertDialogDescription>
-                              Are you sure you want to delete "{product.name}"? This action cannot be undone.
+                              Are you sure you want to delete &quot;{product.name}&quot;? This action cannot be undone.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <div className="flex gap-2">

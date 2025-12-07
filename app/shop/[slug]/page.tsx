@@ -127,7 +127,7 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-white mb-4">Shop Not Found</h1>
-          <p className="text-gray-400">The shop you're looking for doesn't exist.</p>
+          <p className="text-gray-400">The shop you&apos;re looking for doesn&apos;t exist.</p>
         </div>
       </div>
     );
@@ -424,7 +424,7 @@ export default function PublicShopPage({ params }: { params: { slug: string } })
                             disabled={isProcessing}
                           />
                           <p className="text-xs text-gray-500 mt-1">
-                            We'll send the receipt and confirmation to this email
+                            We&apos;ll send the receipt and confirmation to this email
                           </p>
                         </div>
 
