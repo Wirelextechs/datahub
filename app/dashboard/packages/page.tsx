@@ -286,26 +286,6 @@ export default function PackagesPage() {
                 </DialogHeader>
 
                 <div className="space-y-4">
-                  {/* Product Summary */}
-                  <div className="bg-slate-100 p-4 rounded-lg">
-                    <div className="flex justify-between mb-2">
-                      <span className="text-gray-600">Network:</span>
-                      <span className="font-semibold text-gray-900">{getNetworkDisplayName(selectedNetwork)}</span>
-                    </div>
-                    <div className="flex justify-between mb-2">
-                      <span className="text-gray-600">Size:</span>
-                      <span className="font-semibold text-gray-900">{selectedPackage?.size}</span>
-                    </div>
-                    <div className="flex justify-between mb-2">
-                      <span className="text-gray-600">Validity:</span>
-                      <span className="font-semibold text-gray-900">{selectedPackage?.validity}</span>
-                    </div>
-                    <div className="border-t pt-2 flex justify-between">
-                      <span className="text-gray-600 font-semibold">Total Price:</span>
-                      <span className="font-bold text-green-600">{selectedPackage?.price}</span>
-                    </div>
-                  </div>
-
                   {/* Error Message */}
                   {errorMessage && (
                     <Alert variant="destructive">
@@ -320,17 +300,7 @@ export default function PackagesPage() {
                       <Check className="h-4 w-4 text-green-600" />
                       <AlertDescription className="text-green-800">{successMessage}</AlertDescription>
                     </Alert>
-                  )}
-
-                  {/* Network Info Alert */}
-                  <Alert className="bg-blue-50 border-blue-200">
-                    <Info className="h-4 w-4 text-blue-600" />
-                    <AlertDescription className="text-blue-800">
-                      <strong>{getNetworkDisplayName(selectedNetwork)} Network:</strong> {NETWORK_PATTERNS[selectedNetwork as keyof typeof NETWORK_PATTERNS]?.description}
-                    </AlertDescription>
-                  </Alert>
-
-                  {/* Beneficiary Number Input */}
+                  )}{/* Beneficiary Number Input */}
                   <div>
                     <Label htmlFor="beneficiary" className="flex items-center gap-2">
                       <Phone className="w-4 h-4" />
