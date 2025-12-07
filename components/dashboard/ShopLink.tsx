@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Copy, ExternalLink, AlertCircle } from 'lucide-react'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Copy, ExternalLink } from 'lucide-react'
 
 interface Shop {
   id: number
@@ -18,99 +17,28 @@ interface Shop {
 
 export default function ShopLink() {
   const [shop, setShop] = useState<Shop | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
-    fetchShop()
+    setIsClient(true)
+    // For now, set a demo shop
+    const demoShop: Shop = {
+      id: 1,
+      user_id: 1,
+      name: "Prosper's Data Shop",
+      slug: 'prosper-wedam-data-shop',
+      description: 'Quality data packages at affordable prices',
+      owner_name: 'Prosper Wedam',
+    }
+    setShop(demoShop)
   }, [])
 
-  const fetchShop = async () => {
-    try {
-      setLoading(true)
-      
-      // Try to get user from localStorage
-      let userId = null
-      let userName = 'User'
-      
-      try {
-        const token = localStorage.getItem('token')
-        const user = localStorage.getItem('user')
-        
-        if (user) {
-          const userData = JSON.parse(user)
-          userId = userData.id
-          userName = userData.name || 'User'
-        }
-      } catch (e) {
-        console.log('Could not parse user data from localStorage')
-      }
-
-      // If no user ID, use a default for demo purposes
-      if (!userId) {
-        // Create a demo shop for testing
-        const demoShop: Shop = {
-          id: 1,
-          user_id: 1,
-          name: "Prosper's Data Shop",
-          slug: 'prosper-wedam-data-shop',
-          description: 'Quality data packages at affordable prices',
-          owner_name: 'Prosper Wedam',
-        }
-        setShop(demoShop)
-        setLoading(false)
-        return
-      }
-
-      const response = await fetch('/api/shops', {
-        headers: {
-          'x-user-id': userId.toString(),
-        },
-      })
-
-      if (response.status === 404) {
-        // Shop doesn't exist, create one with default values
-        const shopSlug = userName
-          .toLowerCase()
-          .replace(/\s+/g, '-')
-          .replace(/[^a-z0-9-]/g, '')
-
-        const createResponse = await fetch('/api/shops', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userId: userId,
-            name: `${userName}'s Data Shop`,
-            slug: shopSlug || 'my-data-shop',
-            description: 'Quality data packages at affordable prices',
-            ownerName: userName,
-          }),
-        })
-
-        if (createResponse.ok) {
-          const newShop = await createResponse.json()
-          setShop(newShop)
-        } else {
-          setError('Failed to create shop')
-        }
-      } else if (response.ok) {
-        const shopData = await response.json()
-        setShop(shopData)
-      } else {
-        setError('Failed to fetch shop')
-      }
-    } catch (err) {
-      console.error('Error fetching shop:', err)
-      setError('An error occurred while fetching shop')
-    } finally {
-      setLoading(false)
-    }
+  if (!isClient) {
+    return null
   }
 
-  const shopUrl = shop ? `${typeof window !== 'undefined' ? window.location.origin : ''}/shop/${shop.slug}` : ''
+  const shopUrl = shop ? `${window.location.origin}/shop/${shop.slug}` : ''
 
   const copyToClipboard = () => {
     if (shopUrl) {
@@ -120,28 +48,8 @@ export default function ShopLink() {
     }
   }
 
-  if (loading) {
-    return (
-      <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
-        <div className="animate-pulse">
-          <div className="h-4 bg-blue-200 rounded w-1/4 mb-4"></div>
-          <div className="h-10 bg-blue-200 rounded w-full"></div>
-        </div>
-      </Card>
-    )
-  }
-
-  if (error) {
-    return (
-      <Alert variant="destructive">
-        <AlertCircle className="h-4 w-4" />
-        <AlertDescription>{error}</AlertDescription>
-      </Alert>
-    )
-  }
-
   return (
-    <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+    <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 mb-8">
       <div className="space-y-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
